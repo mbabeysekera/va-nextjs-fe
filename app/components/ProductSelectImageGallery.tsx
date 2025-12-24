@@ -35,7 +35,7 @@ const ProductSelectImageGallery = ({ productDetails }: Props) => {
           <Image
             key={index}
             src={item.image_url}
-            alt={item.item_code}
+            alt={item.item_code.toString()}
             width={125}
             height={125}
             className={`rounded-lg border-2 ${
@@ -49,7 +49,7 @@ const ProductSelectImageGallery = ({ productDetails }: Props) => {
       <div className="flex w-200">
         <Image
           src={productDetails.items[selected].image_url}
-          alt={productDetails.items[selected].item_code}
+          alt={productDetails.items[selected].item_code.toString()}
           width={620}
           height={620}
           className="rounded-lg"
@@ -62,6 +62,9 @@ const ProductSelectImageGallery = ({ productDetails }: Props) => {
         </p>
         <p className="font-semibold text-3xl p-2">
           {productDetails.product.title}
+        </p>
+        <p className="text-sm text-muted-foreground p-2">
+          Brand: {productDetails.product.brand}
         </p>
         <p className="text-sm px-2">{productDetails.product.description}</p>
         <p className="text-2xl font-bold p-2">

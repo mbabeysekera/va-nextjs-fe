@@ -8,6 +8,10 @@ export function proxy(request: NextRequest) {
     return NextResponse.redirect(new URL("/login", request.url));
   }
 
+  if (!token && request.nextUrl.pathname.startsWith("/api")) {
+    return NextResponse.redirect(new URL("/login", request.url));
+  }
+
   // Rewrite: Act as a proxy to an external microservice
   //   if (request.nextUrl.pathname.startsWith("/api/v2")) {
   //     return NextResponse.rewrite(
@@ -18,5 +22,5 @@ export function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/dashboard", "/dashboard/:path*"],
+  matcher: ["/dashboard", "/dashboard/:path*", "/api", "/api/:path*"],
 };

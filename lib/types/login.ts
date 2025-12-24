@@ -1,16 +1,23 @@
-enum LoginResponseStatus {
+enum ResponseStatus {
   SUCCESS = "SUCCESS",
   FAILED = "FAILED",
 }
 
 interface LoginResponse {
-  status: LoginResponseStatus;
+  status: ResponseStatus;
   access_token: string;
   time: Date;
 }
 
 interface StdErrorResponse {
-  status: LoginResponseStatus;
+  status: ResponseStatus;
+  message: string;
+  error_id: string;
+  time: Date;
+}
+
+interface StdSuccessResponse {
+  status: ResponseStatus;
   message: string;
   error_id: string;
   time: Date;
