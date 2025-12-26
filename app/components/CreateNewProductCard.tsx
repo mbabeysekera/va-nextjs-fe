@@ -11,14 +11,32 @@ import {
   FieldSet,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { createProduct } from "@/lib/core/productAction";
 import { useState } from "react";
+import { toast } from "sonner";
+
+type ProductCategory =
+  | "EARRING"
+  | "PENDANT"
+  | "BRACELET"
+  | "NECKLACE"
+  | "RING"
+  | "NONE";
 
 const CreateNewProductCard = () => {
   const [stage, setStage] = useState("product");
   // const productToBeCreated: ProductDetails = {};
+  const [fieldValidate, setFieldValidate] = useState(true);
   const [title, setTitle] = useState("");
   const [brand, setBrand] = useState("");
-  const [category, setCategory] = useState("");
+  const [category, setCategory] = useState<ProductCategory>("NONE");
   const [sku, setSku] = useState("");
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState("");
@@ -26,27 +44,108 @@ const CreateNewProductCard = () => {
   const [itemCode, setItemCode] = useState("");
   const [stock, setStock] = useState("");
   const [imageURL, setImageURL] = useState("");
+  const [image, setImage] = useState<File | null>(null);
+  const [imageMap, setImages] = useState<Map<number, File>>(new Map());
   const [items, setItems] = useState<ItemDetails[]>([]);
 
-  const itemHandler = (itemCode: number, stock: number, imageURL: string) => {
+  const itemHandler = (
+    itemCode: number,
+    stock: number,
+    imageURL: string,
+    image: File
+  ) => {
     const item: ItemDetails = {
       item_code: itemCode,
       in_stock: stock,
       image_url: imageURL,
     };
+    setImages((prev) => {
+      const next = new Map(prev);
+      next.set(itemCode, image);
+      return next;
+    });
     setItems((items) => [...items, item]);
     setItemCode("");
     setStock("");
     setImageURL("");
   };
 
+  const onNextClickHandler = (stage: string) => {
+    if (stage === "items") {
+      if (
+        title === "" ||
+        brand === "" ||
+        category === "NONE" ||
+        sku === "" ||
+        description === "" ||
+        price === ""
+      ) {
+        setFieldValidate(false);
+        return;
+      }
+    }
+    if (stage === "summary") {
+      if (items.length === 0) {
+        setFieldValidate(false);
+        return;
+      }
+    }
+    setFieldValidate(true);
+    setStage(stage);
+  };
+
+  const onStateReset = () => {
+    setTitle("");
+    setBrand("");
+    setCategory("NONE");
+    setSku("");
+    setDescription("");
+    setPrice("");
+    setItems([]);
+    setImages(new Map());
+    setStage("product");
+  };
+
+  const onCancelHandler = () => {
+    onStateReset();
+  };
+
+  const onSubmitHandler = async () => {
+    const productWithItems: Product & { items: ItemDetails[] } = {
+      title,
+      brand,
+      category,
+      sku,
+      description,
+      price: parseFloat(price),
+      items: items,
+    };
+    const status = await createProduct(productWithItems, imageMap);
+    if (status) {
+      toast.success("Product created successfully");
+    } else {
+      toast.error("Failed to create product");
+    }
+    onStateReset();
+  };
+
   return (
     <div className="w-full max-w-2xl p-0">
-      <form>
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          onSubmitHandler();
+        }}
+      >
         <FieldGroup>
           {stage === "product" && (
             <FieldSet>
-              <FieldLegend>Product Details</FieldLegend>
+              <FieldLegend>
+                Product Details{" "}
+                {!fieldValidate && (
+                  <span className="text-red-700">*Add all required fields</span>
+                )}
+              </FieldLegend>
               <FieldDescription>
                 All mandatory(*) product details must be added to be able to
                 create a new product in the system
@@ -59,7 +158,7 @@ const CreateNewProductCard = () => {
                     placeholder="Product Name"
                     required
                     onChange={(e) => setTitle(e.target.value)}
-                    defaultValue={title}
+                    value={title}
                   />
                 </Field>
                 <Field>
@@ -69,18 +168,26 @@ const CreateNewProductCard = () => {
                     placeholder="VA Collection"
                     required
                     onChange={(e) => setBrand(e.target.value)}
-                    defaultValue={brand}
+                    value={brand}
                   />
                 </Field>
                 <Field>
                   <FieldLabel htmlFor="string">Category</FieldLabel>
-                  <Input
-                    id="category"
-                    placeholder="VA Collection"
-                    required
-                    onChange={(e) => setCategory(e.target.value)}
+                  <Select
                     defaultValue={category}
-                  />
+                    onValueChange={(e) => setCategory(e as ProductCategory)}
+                  >
+                    <SelectTrigger id="cat">
+                      <SelectValue placeholder="Category" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="EARRING">EARRING</SelectItem>
+                      <SelectItem value="RING">RING</SelectItem>
+                      <SelectItem value="NECKLACE">NECKLACE</SelectItem>
+                      <SelectItem value="BRACELET">BRACELET</SelectItem>
+                      <SelectItem value="PENDANT">PENDANT</SelectItem>
+                    </SelectContent>
+                  </Select>
                 </Field>
                 <Field>
                   <FieldLabel htmlFor="string">Stock Keeping Unit</FieldLabel>
@@ -89,7 +196,7 @@ const CreateNewProductCard = () => {
                     placeholder="CAT-000001"
                     required
                     onChange={(e) => setSku(e.target.value)}
-                    defaultValue={sku}
+                    value={sku}
                   />
                 </Field>
                 <Field>
@@ -99,7 +206,7 @@ const CreateNewProductCard = () => {
                     placeholder="Brief description of the product"
                     required
                     onChange={(e) => setDescription(e.target.value)}
-                    defaultValue={description}
+                    value={description}
                   />
                 </Field>
                 <Field>
@@ -109,11 +216,14 @@ const CreateNewProductCard = () => {
                     placeholder="100.00"
                     required
                     onChange={(e) => setPrice(e.target.value)}
-                    defaultValue={price}
+                    value={price}
                   />
                 </Field>
                 <div className="flex flex-row justify-end">
-                  <Button type="button" onClick={() => setStage("items")}>
+                  <Button
+                    type="button"
+                    onClick={() => onNextClickHandler("items")}
+                  >
                     Next
                   </Button>
                 </div>
@@ -122,7 +232,12 @@ const CreateNewProductCard = () => {
           )}
           {stage === "items" && (
             <FieldSet>
-              <FieldLegend>Item Details</FieldLegend>
+              <FieldLegend>
+                Item Details{" "}
+                {!fieldValidate && (
+                  <span className="text-red-700">*Add all required fields</span>
+                )}
+              </FieldLegend>
               <FieldDescription>
                 Add each item with all the required details.
               </FieldDescription>
@@ -153,65 +268,175 @@ const CreateNewProductCard = () => {
                   placeholder=""
                   required
                   type="file"
-                  onChange={(e) => setImageURL(e.target.value)}
-                  value={imageURL}
+                  onChange={(e) => {
+                    const file = e.target.files?.[0];
+                    if (!file) {
+                      return;
+                    }
+                    setImage(file);
+                    setImageURL(e.target.value);
+                  }}
                 />
               </Field>
               <Field>
                 {items.length > 0 && (
-                  <table className="table-auto">
-                    <thead>
-                      <tr>
-                        <th className="text-left">Item Code</th>
-                        <th className="text-left">In Stock</th>
-                        <th className="text-left">Image</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {items.map((item) => (
-                        <tr
-                          key={item.item_code}
-                          className="border-b-2 border-zinc-300"
-                        >
-                          <td>{item.item_code}</td>
-                          <td>{item.in_stock}</td>
-                          <td>{item.image_url}</td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
+                  <ItemTable
+                    headers={["Item Code", "In Stock", "Image"]}
+                    items={items}
+                  />
                 )}
               </Field>
-              <div className="flex flex-row justify-between">
-                <Button type="button" onClick={() => setStage("product")}>
-                  Back
-                </Button>
+              <div className="mt-2 flex items-center justify-between border-t border-zinc-200 pt-4">
                 <Button
                   type="button"
-                  onClick={() =>
-                    itemHandler(
-                      parseInt(itemCode, 10),
-                      parseInt(stock, 10),
-                      imageURL
-                    )
-                  }
+                  variant="secondary"
+                  onClick={() => setStage("product")}
                 >
-                  Add Item
+                  Back
                 </Button>
-                <Button type="button" onClick={() => setStage("summary")}>
-                  Next
-                </Button>
+                <div className="flex gap-3">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={() =>
+                      itemHandler(
+                        parseInt(itemCode, 10),
+                        parseInt(stock, 10),
+                        imageURL,
+                        image as File
+                      )
+                    }
+                  >
+                    Add Item
+                  </Button>
+                  <Button
+                    type="button"
+                    onClick={() => onNextClickHandler("summary")}
+                  >
+                    Next
+                  </Button>
+                </div>
               </div>
             </FieldSet>
           )}
-          {/* <Field orientation="horizontal">
-            <Button type="submit">Submit</Button>
-            <Button variant="outline" type="button">
-              Cancel
-            </Button>
-          </Field> */}
+          {stage === "summary" && (
+            <div>
+              <p>Product Create Summary</p>
+              <FieldSeparator className="my-2" />
+              <div className="rounded-lg border border-zinc-200 bg-white p-6">
+                <div className="grid grid-cols-3 gap-x-6 gap-y-4 text-sm">
+                  <span className="col-span-1 font-medium text-zinc-600">
+                    Title
+                  </span>
+                  <span className="col-span-2 text-zinc-900">{title}</span>
+
+                  <span className="col-span-1 font-medium text-zinc-600">
+                    Brand
+                  </span>
+                  <span className="col-span-2 text-zinc-900">{brand}</span>
+
+                  <span className="col-span-1 font-medium text-zinc-600">
+                    Category
+                  </span>
+                  <span className="col-span-2 text-zinc-900">{category}</span>
+
+                  <span className="col-span-1 font-medium text-zinc-600">
+                    Stock Keeping Unit
+                  </span>
+                  <span className="col-span-2 font-mono text-zinc-900">
+                    {sku}
+                  </span>
+
+                  <span className="col-span-1 font-medium text-zinc-600">
+                    Description
+                  </span>
+                  <span className="col-span-2 text-zinc-900">
+                    {description}
+                  </span>
+
+                  <span className="col-span-1 font-medium text-zinc-600">
+                    Price
+                  </span>
+                  <span className="col-span-2 font-semibold text-zinc-900">
+                    {price}
+                  </span>
+                </div>
+              </div>
+              <FieldSeparator className="my-2" />
+              {items.length > 0 && (
+                <ItemTable
+                  headers={["Item Code", "In Stock", "Image"]}
+                  items={items}
+                />
+              )}
+              <div className="mt-6 flex items-center justify-between border-t border-zinc-200 pt-4">
+                <Button
+                  type="button"
+                  variant="secondary"
+                  onClick={() => setStage("items")}
+                >
+                  Back
+                </Button>
+
+                <div className="flex gap-3">
+                  <Button
+                    variant="outline"
+                    type="button"
+                    onClick={onCancelHandler}
+                  >
+                    Cancel
+                  </Button>
+
+                  <Button type="submit">Submit</Button>
+                </div>
+              </div>
+            </div>
+          )}
         </FieldGroup>
       </form>
+    </div>
+  );
+};
+
+interface ItemTableProps {
+  headers: Array<string>;
+  items: Array<ItemDetails>;
+}
+
+const ItemTable = ({ headers, items }: ItemTableProps) => {
+  return (
+    <div className="overflow-x-auto rounded-lg border border-zinc-200 bg-white">
+      <table className="w-full border-collapse text-sm">
+        <thead className="bg-zinc-50">
+          <tr className="border-b border-zinc-200">
+            {headers.map((header) => (
+              <th
+                key={header}
+                className="px-4 py-3 text-left font-medium text-zinc-600"
+              >
+                {header}
+              </th>
+            ))}
+          </tr>
+        </thead>
+
+        <tbody>
+          {items.map((item) => (
+            <tr
+              key={item.item_code}
+              className="border-b border-zinc-100 last:border-0 hover:bg-zinc-50 transition-colors"
+            >
+              <td className="px-4 py-3 font-mono text-zinc-900">
+                {item.item_code}
+              </td>
+              <td className="px-4 py-3 text-zinc-700">{item.in_stock}</td>
+              <td className="px-4 py-3 text-zinc-500 truncate max-w-50">
+                {item.image_url}
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 };

@@ -1,0 +1,39 @@
+type ProductCreate = Product & { items: ItemDetails[] };
+
+export const createProduct = async (
+  product: ProductCreate,
+  images: Map<number, File>
+): Promise<boolean> => {
+  for (const [key, file] of images) {
+    if (file) {
+      const formData = new FormData();
+      formData.append("image", file);
+      const res = await fetch("/api/image/upload", {
+        method: "POST",
+        body: formData,
+      });
+      if (!res.ok) {
+        return false;
+      }
+      const data: { url: string } = await res.json();
+      for (const item of product.items) {
+        if (item.item_code === key) {
+          item.image_url = data.url;
+        }
+      }
+    } else {
+      return false;
+    }
+  }
+  const res = await fetch("/api/product/create", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(product),
+  });
+
+  if (!res.ok) {
+    return false;
+  }
+
+  return true;
+};

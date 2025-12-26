@@ -2,9 +2,16 @@ import CreateNewProductCard from "./CreateNewProductCard";
 
 const ProductControl = () => {
   return (
-    <div className="flex flex-col w-4xl h-full ml-2 p-2">
-      <p className="font-semibold text-3xl pt-3">Add New Product Here</p>
-      <div className="flex flex-col w-full h-full items-center pt-4">
+    <div className="flex h-full w-full flex-col gap-6 px-6 py-4">
+      <div className="border-b border-zinc-200 pb-4">
+        <h1 className="text-2xl font-semibold text-zinc-900">
+          Add New Product
+        </h1>
+        <p className="mt-1 text-sm text-zinc-600">
+          Enter product details and items to create a new product.
+        </p>
+      </div>
+      <div className="flex flex-1 items-start justify-center">
         <CreateNewProductCard />
       </div>
     </div>

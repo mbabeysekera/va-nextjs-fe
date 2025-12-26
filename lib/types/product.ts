@@ -10,7 +10,7 @@ interface ItemDetails {
 interface Product {
   id?: number;
   title: string;
-  braned: string;
+  brand: string;
   category: string;
   sku: string;
   description: string;

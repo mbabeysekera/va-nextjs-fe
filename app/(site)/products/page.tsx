@@ -8,8 +8,8 @@ const ProductPage = async () => {
   });
   const products: ProductList = await res.json();
   return (
-    <div className="flex w-full min-h-screen">
-      <div className="flex flex-wrap justify-between">
+    <div className="flex  justify-center">
+      <div className="flex flex-wrap gap-1">
         {products.all &&
           products.all.map((productDetails) => (
             <Link
@@ -18,7 +18,7 @@ const ProductPage = async () => {
             >
               <ProductCard
                 title={productDetails.product.title}
-                brand={productDetails.product.braned}
+                brand={productDetails.product.brand}
                 description={productDetails.product.description}
                 price={productDetails.product.price.toFixed(2)}
                 items={productDetails.items}
