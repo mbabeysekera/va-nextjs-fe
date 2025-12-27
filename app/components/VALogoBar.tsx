@@ -27,7 +27,7 @@ const VALogoBar = () => {
         <Link href="/login">
           <LoginLogoButton />
         </Link>
-        <Link href="/cart">
+        <Link href="#">
           <AddToCartButton />
         </Link>
       </div>

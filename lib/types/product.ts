@@ -25,3 +25,11 @@ interface ProductDetails {
 interface ProductList {
   all: ProductDetails[];
 }
+
+type ProductCategory =
+  | "EARRING"
+  | "PENDANT"
+  | "BRACELET"
+  | "NECKLACE"
+  | "RING"
+  | "NONE";

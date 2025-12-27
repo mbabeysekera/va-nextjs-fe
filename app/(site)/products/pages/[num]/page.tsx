@@ -2,14 +2,30 @@ import AppPagination from "@/app/components/AppPagination";
 import ProductCard from "@/app/components/ProductCard";
 import Link from "next/link";
 
-const ProductPage = async () => {
-  const getAllProduct = `${process.env.BACKEND_URL}${process.env.API_BASE_URL}/products/all`;
+interface ProductPageProps {
+  params: Promise<{
+    num: string;
+  }>;
+  searchParams: Promise<{
+    category?: string;
+  }>;
+}
+const ProductPage = async ({ params, searchParams }: ProductPageProps) => {
+  const { num } = await params;
+  const { category } = await searchParams;
+
+  const pageNumber = parseInt(num) ?? 1;
+  const getAllProduct = `${process.env.BACKEND_URL}${
+    process.env.API_BASE_URL
+  }/products/all?page=${pageNumber}&count=${10}${
+    category ? `&category=${category}` : ""
+  }`;
   const res = await fetch(getAllProduct, {
     cache: "no-store",
   });
   const products: ProductList = await res.json();
   return (
-    <div className="flex flex-col items-center w-full">
+    <div className="flex flex-col items-center w-full gap-5">
       <div className="grid w-full max-w-7xl grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 place-items-center">
         {products.all &&
           products.all.map((productDetails) => (
@@ -30,7 +46,7 @@ const ProductPage = async () => {
       </div>
       <AppPagination
         hrefBase="/products/pages/"
-        currentPage={1}
+        currentPage={pageNumber}
         totalPages={4}
       />
     </div>

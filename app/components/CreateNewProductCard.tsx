@@ -22,14 +22,6 @@ import { createProduct } from "@/lib/core/productAction";
 import { useState } from "react";
 import { toast } from "sonner";
 
-type ProductCategory =
-  | "EARRING"
-  | "PENDANT"
-  | "BRACELET"
-  | "NECKLACE"
-  | "RING"
-  | "NONE";
-
 const CreateNewProductCard = () => {
   const [stage, setStage] = useState("product");
   // const productToBeCreated: ProductDetails = {};

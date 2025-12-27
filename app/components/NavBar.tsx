@@ -21,16 +21,22 @@ const menuItems: { item: string; links: NavBarItemLinks[] }[] = [
   {
     item: "Jewelry",
     links: [
-      { linkName: "Earrings", linkURL: "/jewelry/all-earrings" },
-      { linkName: "Rings", linkURL: "/jewelry/all-rings" },
-      { linkName: "Necklace", linkURL: "/jewelryall-necklace" },
-      { linkName: "Bracelets", linkURL: "/jewelry/all-bracelets" },
-      { linkName: "Pendants", linkURL: "/jewelry/all-pendants" },
+      { linkName: "Earrings", linkURL: "/products/pages/1?category=EARRING" },
+      { linkName: "Rings", linkURL: "/products/pages/1?category=RING" },
+      { linkName: "Necklace", linkURL: "/products/pages/1?category=NECKLACE" },
+      { linkName: "Bracelets", linkURL: "/products/pages/1?category=BRACELET" },
+      { linkName: "Pendants", linkURL: "/products/pages/1?category=PENDANT" },
     ],
   },
-  { item: "Pearl Type", links: [{ linkName: "Plastic", linkURL: "/test" }] },
-  { item: "Upcoming", links: [{ linkName: "Seasonal", linkURL: "/test" }] },
+  {
+    item: "Pearl Type",
+    links: [{ linkName: "Coming Soon...", linkURL: "#" }],
+  },
+  { item: "Upcoming", links: [{ linkName: "Seasonal", linkURL: "/seasonal" }] },
 ];
+
+// { item: "Pearl Type", links: [{ linkName: "Plastic", linkURL: "/test" }] },
+//   { item: "Upcoming", links: [{ linkName: "Seasonal", linkURL: "/test" }] },
 
 interface Props {
   user: IntrospectResponse | null;
