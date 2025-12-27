@@ -24,6 +24,7 @@ interface ProductDetails {
 
 interface ProductList {
   all: ProductDetails[];
+  count: number;
 }
 
 type ProductCategory =

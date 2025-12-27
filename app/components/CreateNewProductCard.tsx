@@ -107,7 +107,7 @@ const CreateNewProductCard = () => {
       title,
       brand,
       category,
-      sku,
+      sku: `${category.substring(0, 3)}-${sku}`,
       description,
       price: parseFloat(price),
       items: items,
@@ -151,6 +151,7 @@ const CreateNewProductCard = () => {
                     required
                     onChange={(e) => setTitle(e.target.value)}
                     value={title}
+                    maxLength={24}
                   />
                 </Field>
                 <Field>
@@ -161,6 +162,7 @@ const CreateNewProductCard = () => {
                     required
                     onChange={(e) => setBrand(e.target.value)}
                     value={brand}
+                    maxLength={24}
                   />
                 </Field>
                 <Field>
@@ -189,6 +191,7 @@ const CreateNewProductCard = () => {
                     required
                     onChange={(e) => setSku(e.target.value)}
                     value={sku}
+                    maxLength={12}
                   />
                 </Field>
                 <Field>
@@ -199,6 +202,7 @@ const CreateNewProductCard = () => {
                     required
                     onChange={(e) => setDescription(e.target.value)}
                     value={description}
+                    maxLength={64}
                   />
                 </Field>
                 <Field>
@@ -241,6 +245,7 @@ const CreateNewProductCard = () => {
                   required
                   onChange={(e) => setItemCode(e.target.value)}
                   value={itemCode}
+                  maxLength={10}
                 />
               </Field>
               <Field>
@@ -251,6 +256,7 @@ const CreateNewProductCard = () => {
                   required
                   onChange={(e) => setStock(e.target.value)}
                   value={stock}
+                  maxLength={6}
                 />
               </Field>
               <Field>
@@ -336,7 +342,7 @@ const CreateNewProductCard = () => {
                     Stock Keeping Unit
                   </span>
                   <span className="col-span-2 font-mono text-zinc-900">
-                    {sku}
+                    {`${category.substring(0, 3)}-${sku}`}
                   </span>
 
                   <span className="col-span-1 font-medium text-zinc-600">

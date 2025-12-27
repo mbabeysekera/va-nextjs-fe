@@ -1,6 +1,4 @@
-import AppPagination from "@/app/components/AppPagination";
-import ProductCard from "@/app/components/ProductCard";
-import Link from "next/link";
+import ProductListCard from "@/app/components/ProductListCard";
 
 const ProductPage = async () => {
   const getAllProduct = `${process.env.BACKEND_URL}${process.env.API_BASE_URL}/products/all`;
@@ -8,32 +6,13 @@ const ProductPage = async () => {
     cache: "no-store",
   });
   const products: ProductList = await res.json();
+  const pageCount = Math.ceil(products.count / 10);
   return (
-    <div className="flex flex-col items-center w-full">
-      <div className="grid w-full max-w-7xl grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 place-items-center">
-        {products.all &&
-          products.all.map((productDetails) => (
-            <Link
-              key={productDetails.product.id}
-              href={`/products/${productDetails.product.id}`}
-              className="block"
-            >
-              <ProductCard
-                title={productDetails.product.title}
-                brand={productDetails.product.brand}
-                description={productDetails.product.description}
-                price={productDetails.product.price.toFixed(2)}
-                items={productDetails.items}
-              />
-            </Link>
-          ))}
-      </div>
-      <AppPagination
-        hrefBase="/products/pages/"
-        currentPage={1}
-        totalPages={4}
-      />
-    </div>
+    <ProductListCard
+      productList={products}
+      currentPage={1}
+      totalPages={pageCount}
+    />
   );
 };
 
