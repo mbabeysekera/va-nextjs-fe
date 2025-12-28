@@ -24,4 +24,15 @@ interface ProductDetails {
 
 interface ProductList {
   all: ProductDetails[];
+  count: number;
 }
+
+type ProductWithItems = Product & { items: ItemDetails[] };
+
+type ProductCategory =
+  | "EARRING"
+  | "PENDANT"
+  | "BRACELET"
+  | "NECKLACE"
+  | "RING"
+  | "NONE";

@@ -18,48 +18,49 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { createProduct } from "@/lib/core/productAction";
+import { createProduct } from "@/lib/core/product/productAction";
+import {
+  searchByItemCode,
+  searchBySku,
+} from "@/lib/core/product/productValidators";
+import { cn } from "@/lib/utils";
 import { useState } from "react";
 import { toast } from "sonner";
 
-type ProductCategory =
-  | "EARRING"
-  | "PENDANT"
-  | "BRACELET"
-  | "NECKLACE"
-  | "RING"
-  | "NONE";
-
 const CreateNewProductCard = () => {
   const [stage, setStage] = useState("product");
-  // const productToBeCreated: ProductDetails = {};
-  const [fieldValidate, setFieldValidate] = useState(true);
   const [title, setTitle] = useState("");
   const [brand, setBrand] = useState("");
   const [category, setCategory] = useState<ProductCategory>("NONE");
   const [sku, setSku] = useState("");
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState("");
+  const [validationStatus, setValidationStatus] = useState<
+    "idle" | "checking" | "valid" | "invalid"
+  >("idle");
 
   const [itemCode, setItemCode] = useState("");
   const [stock, setStock] = useState("");
-  const [imageURL, setImageURL] = useState("");
+  const [fileKey, setFileKey] = useState(0);
   const [image, setImage] = useState<File | null>(null);
   const [imageMap, setImages] = useState<Map<number, File>>(new Map());
   const [items, setItems] = useState<ItemDetails[]>([]);
 
-  const itemHandler = (
-    itemCode: number,
-    stock: number,
-    imageURL: string,
-    image: File
-  ) => {
+  const itemHandler = (itemCode: number, stock: number, image: File) => {
+    if (validationStatus !== "valid") {
+      toast.error("Validate item code before add.");
+      return;
+    }
     const item: ItemDetails = {
       item_code: itemCode,
       in_stock: stock,
-      image_url: imageURL,
+      image_url: image.name,
     };
     setImages((prev) => {
+      if (prev.has(itemCode)) {
+        toast.error("Item code already exists");
+        return prev;
+      }
       const next = new Map(prev);
       next.set(itemCode, image);
       return next;
@@ -67,7 +68,8 @@ const CreateNewProductCard = () => {
     setItems((items) => [...items, item]);
     setItemCode("");
     setStock("");
-    setImageURL("");
+    setFileKey((k) => k + 1);
+    setValidationStatus("idle");
   };
 
   const onNextClickHandler = (stage: string) => {
@@ -78,19 +80,20 @@ const CreateNewProductCard = () => {
         category === "NONE" ||
         sku === "" ||
         description === "" ||
-        price === ""
+        price === "" ||
+        validationStatus !== "valid"
       ) {
-        setFieldValidate(false);
+        toast.error("All product fields are required");
         return;
       }
     }
     if (stage === "summary") {
       if (items.length === 0) {
-        setFieldValidate(false);
+        toast.error("Add at least one item to proceed");
         return;
       }
     }
-    setFieldValidate(true);
+    setValidationStatus("idle");
     setStage(stage);
   };
 
@@ -104,10 +107,33 @@ const CreateNewProductCard = () => {
     setItems([]);
     setImages(new Map());
     setStage("product");
+    setValidationStatus("idle");
   };
 
   const onCancelHandler = () => {
     onStateReset();
+  };
+
+  const onValidationCheck = async (type: string) => {
+    setValidationStatus("checking");
+    let validatedProductBySku: ProductDetails = {} as ProductDetails;
+    if (type === "sku") {
+      validatedProductBySku = await searchBySku(
+        `${category.substring(0, 3)}-${sku}`
+      );
+    }
+    if (type === "itemCode") {
+      for (const item of items) {
+        if (item.item_code === parseInt(itemCode)) {
+          setValidationStatus("invalid");
+          return;
+        }
+      }
+      validatedProductBySku = await searchByItemCode(parseInt(itemCode, 10));
+    }
+    setValidationStatus(
+      validatedProductBySku.product?.id ? "invalid" : "valid"
+    );
   };
 
   const onSubmitHandler = async () => {
@@ -115,7 +141,7 @@ const CreateNewProductCard = () => {
       title,
       brand,
       category,
-      sku,
+      sku: `${category.substring(0, 3)}-${sku}`,
       description,
       price: parseFloat(price),
       items: items,
@@ -140,12 +166,7 @@ const CreateNewProductCard = () => {
         <FieldGroup>
           {stage === "product" && (
             <FieldSet>
-              <FieldLegend>
-                Product Details{" "}
-                {!fieldValidate && (
-                  <span className="text-red-700">*Add all required fields</span>
-                )}
-              </FieldLegend>
+              <FieldLegend>Product Details</FieldLegend>
               <FieldDescription>
                 All mandatory(*) product details must be added to be able to
                 create a new product in the system
@@ -159,6 +180,7 @@ const CreateNewProductCard = () => {
                     required
                     onChange={(e) => setTitle(e.target.value)}
                     value={title}
+                    maxLength={24}
                   />
                 </Field>
                 <Field>
@@ -169,6 +191,7 @@ const CreateNewProductCard = () => {
                     required
                     onChange={(e) => setBrand(e.target.value)}
                     value={brand}
+                    maxLength={24}
                   />
                 </Field>
                 <Field>
@@ -190,14 +213,51 @@ const CreateNewProductCard = () => {
                   </Select>
                 </Field>
                 <Field>
-                  <FieldLabel htmlFor="string">Stock Keeping Unit</FieldLabel>
-                  <Input
-                    id="sku"
-                    placeholder="CAT-000001"
-                    required
-                    onChange={(e) => setSku(e.target.value)}
-                    value={sku}
-                  />
+                  <div className="flex flex-row items-center">
+                    <FieldLabel htmlFor="string">
+                      Stock Keeping Unit (SKU)
+                    </FieldLabel>
+                    <p
+                      className={cn(
+                        "ml-2 text-sm font-semibold transition-opacity",
+                        validationStatus === "valid"
+                          ? "text-green-500 opacity-100"
+                          : validationStatus === "invalid"
+                          ? "text-red-500 opacity-100"
+                          : "opacity-0"
+                      )}
+                    >
+                      {validationStatus === "valid"
+                        ? "SKU is available!"
+                        : "SKU is already in use!"}
+                    </p>
+                  </div>
+                  <div className="flex gap-2 items-start">
+                    <Input
+                      inputMode="numeric"
+                      pattern="[0-9]*"
+                      id="sku"
+                      placeholder="XXXXX"
+                      required
+                      onChange={(e) => {
+                        const val = e.target.value;
+                        if (/^\d*$/.test(val)) {
+                          setSku(val);
+                        }
+                        setValidationStatus("idle");
+                      }}
+                      value={sku}
+                      maxLength={12}
+                    />
+                    <Button
+                      disabled={!sku || validationStatus === "checking"}
+                      variant={"outline"}
+                      onClick={() => onValidationCheck("sku")}
+                      type="button"
+                    >
+                      Check
+                    </Button>
+                  </div>
                 </Field>
                 <Field>
                   <FieldLabel htmlFor="string">Description</FieldLabel>
@@ -207,15 +267,23 @@ const CreateNewProductCard = () => {
                     required
                     onChange={(e) => setDescription(e.target.value)}
                     value={description}
+                    maxLength={64}
                   />
                 </Field>
                 <Field>
                   <FieldLabel htmlFor="string">Price</FieldLabel>
                   <Input
+                    inputMode="decimal"
+                    pattern="^\d*\.?\d*$"
                     id="price"
                     placeholder="100.00"
                     required
-                    onChange={(e) => setPrice(e.target.value)}
+                    onChange={(e) => {
+                      const val = e.target.value;
+                      if (/^\d*\.?\d{0,2}$/.test(val)) {
+                        setPrice(e.target.value);
+                      }
+                    }}
                     value={price}
                   />
                 </Field>
@@ -232,38 +300,77 @@ const CreateNewProductCard = () => {
           )}
           {stage === "items" && (
             <FieldSet>
-              <FieldLegend>
-                Item Details{" "}
-                {!fieldValidate && (
-                  <span className="text-red-700">*Add all required fields</span>
-                )}
-              </FieldLegend>
+              <FieldLegend>Item Details</FieldLegend>
               <FieldDescription>
                 Add each item with all the required details.
               </FieldDescription>
               <Field>
-                <FieldLabel htmlFor="string">Item Code</FieldLabel>
-                <Input
-                  id="item_code"
-                  placeholder="XXXX"
-                  required
-                  onChange={(e) => setItemCode(e.target.value)}
-                  value={itemCode}
-                />
+                <div className="flex flex-row items-center">
+                  <FieldLabel htmlFor="string">Item Code</FieldLabel>
+                  <p
+                    className={cn(
+                      "ml-2 text-sm font-semibold transition-opacity",
+                      validationStatus === "valid"
+                        ? "text-green-500 opacity-100"
+                        : validationStatus === "invalid"
+                        ? "text-red-500 opacity-100"
+                        : "opacity-0"
+                    )}
+                  >
+                    {validationStatus === "valid"
+                      ? "Item Code is available!"
+                      : "Item Code is already in use!"}
+                  </p>
+                </div>
+                <div className="flex gap-2 items-start">
+                  <Input
+                    inputMode="numeric"
+                    pattern="[0-9]*"
+                    id="item_code"
+                    placeholder="XXXX"
+                    required
+                    onChange={(e) => {
+                      const val = e.target.value;
+                      if (/^\d*$/.test(val)) {
+                        setItemCode(e.target.value);
+                      }
+                      setValidationStatus("idle");
+                    }}
+                    value={itemCode}
+                    maxLength={10}
+                  />
+                  <Button
+                    disabled={!itemCode || validationStatus === "checking"}
+                    variant={"outline"}
+                    onClick={() => onValidationCheck("itemCode")}
+                    type="button"
+                  >
+                    Check
+                  </Button>
+                </div>
               </Field>
               <Field>
                 <FieldLabel htmlFor="string">In Stock</FieldLabel>
                 <Input
+                  inputMode="numeric"
+                  pattern="[0-9]*"
                   id="in_stock"
                   placeholder="Number of items available"
                   required
-                  onChange={(e) => setStock(e.target.value)}
+                  onChange={(e) => {
+                    const val = e.target.value;
+                    if (/^\d*$/.test(val)) {
+                      setStock(val);
+                    }
+                  }}
                   value={stock}
+                  maxLength={6}
                 />
               </Field>
               <Field>
                 <FieldLabel htmlFor="string">Upload Image</FieldLabel>
                 <Input
+                  key={fileKey}
                   id="img"
                   placeholder=""
                   required
@@ -274,7 +381,6 @@ const CreateNewProductCard = () => {
                       return;
                     }
                     setImage(file);
-                    setImageURL(e.target.value);
                   }}
                 />
               </Field>
@@ -290,7 +396,10 @@ const CreateNewProductCard = () => {
                 <Button
                   type="button"
                   variant="secondary"
-                  onClick={() => setStage("product")}
+                  onClick={() => {
+                    setValidationStatus("idle");
+                    setStage("product");
+                  }}
                 >
                   Back
                 </Button>
@@ -298,14 +407,17 @@ const CreateNewProductCard = () => {
                   <Button
                     type="button"
                     variant="outline"
-                    onClick={() =>
+                    onClick={() => {
+                      if (!itemCode || !stock || !image) {
+                        toast.error("All item fields are required");
+                        return;
+                      }
                       itemHandler(
                         parseInt(itemCode, 10),
                         parseInt(stock, 10),
-                        imageURL,
                         image as File
-                      )
-                    }
+                      );
+                    }}
                   >
                     Add Item
                   </Button>
@@ -344,7 +456,7 @@ const CreateNewProductCard = () => {
                     Stock Keeping Unit
                   </span>
                   <span className="col-span-2 font-mono text-zinc-900">
-                    {sku}
+                    {`${category.substring(0, 3)}-${sku}`}
                   </span>
 
                   <span className="col-span-1 font-medium text-zinc-600">
@@ -357,9 +469,7 @@ const CreateNewProductCard = () => {
                   <span className="col-span-1 font-medium text-zinc-600">
                     Price
                   </span>
-                  <span className="col-span-2 font-semibold text-zinc-900">
-                    {price}
-                  </span>
+                  <span className="col-span-2 text-zinc-900">{price}</span>
                 </div>
               </div>
               <FieldSeparator className="my-2" />

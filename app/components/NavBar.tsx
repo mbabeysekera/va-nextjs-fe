@@ -21,15 +21,18 @@ const menuItems: { item: string; links: NavBarItemLinks[] }[] = [
   {
     item: "Jewelry",
     links: [
-      { linkName: "Earrings", linkURL: "/jewelry/all-earrings" },
-      { linkName: "Rings", linkURL: "/jewelry/all-rings" },
-      { linkName: "Necklace", linkURL: "/jewelryall-necklace" },
-      { linkName: "Bracelets", linkURL: "/jewelry/all-bracelets" },
-      { linkName: "Pendants", linkURL: "/jewelry/all-pendants" },
+      { linkName: "Earrings", linkURL: "/products/pages/1?category=EARRING" },
+      { linkName: "Rings", linkURL: "/products/pages/1?category=RING" },
+      { linkName: "Necklace", linkURL: "/products/pages/1?category=NECKLACE" },
+      { linkName: "Bracelets", linkURL: "/products/pages/1?category=BRACELET" },
+      { linkName: "Pendants", linkURL: "/products/pages/1?category=PENDANT" },
     ],
   },
-  { item: "Pearl Type", links: [{ linkName: "Plastic", linkURL: "/test" }] },
-  { item: "Upcoming", links: [{ linkName: "Seasonal", linkURL: "/test" }] },
+  {
+    item: "Pearl Type",
+    links: [{ linkName: "Coming Soon...", linkURL: "/upcoming" }],
+  },
+  { item: "Upcoming", links: [{ linkName: "Seasonal", linkURL: "/upcoming" }] },
 ];
 
 interface Props {
@@ -42,7 +45,7 @@ const NavBar = ({ user }: Props) => {
     isAdmin = true;
   }
   return (
-    <div className="flex items-center justify-center mx-auto max-w-7xl px-6 py-1 relative z-50">
+    <div className="flex items-center justify-center mx-auto max-w-7xl px-6 py-1 mb-8 relative z-50">
       <NavigationMenu viewport={false}>
         <NavigationMenuList className="flex-wrap">
           {menuItems.map((menuItem) => (
@@ -70,7 +73,7 @@ const NavBar = ({ user }: Props) => {
               asChild
               className={`${navigationMenuTriggerStyle()} text-lg font-medium"`}
             >
-              <Link href="/about_us"> Contact Us </Link>
+              <Link href="/about"> Contact Us </Link>
             </NavigationMenuLink>
           </NavigationMenuItem>
           {isAdmin && (

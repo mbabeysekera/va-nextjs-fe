@@ -1,7 +1,5 @@
-type ProductCreate = Product & { items: ItemDetails[] };
-
 export const createProduct = async (
-  product: ProductCreate,
+  product: ProductWithItems,
   images: Map<number, File>
 ): Promise<boolean> => {
   for (const [key, file] of images) {
