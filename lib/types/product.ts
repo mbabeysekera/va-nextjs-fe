@@ -27,6 +27,8 @@ interface ProductList {
   count: number;
 }
 
+type ProductWithItems = Product & { items: ItemDetails[] };
+
 type ProductCategory =
   | "EARRING"
   | "PENDANT"
