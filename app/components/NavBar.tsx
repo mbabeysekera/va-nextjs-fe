@@ -30,13 +30,10 @@ const menuItems: { item: string; links: NavBarItemLinks[] }[] = [
   },
   {
     item: "Pearl Type",
-    links: [{ linkName: "Coming Soon...", linkURL: "#" }],
+    links: [{ linkName: "Coming Soon...", linkURL: "/upcoming" }],
   },
-  { item: "Upcoming", links: [{ linkName: "Seasonal", linkURL: "/seasonal" }] },
+  { item: "Upcoming", links: [{ linkName: "Seasonal", linkURL: "/upcoming" }] },
 ];
-
-// { item: "Pearl Type", links: [{ linkName: "Plastic", linkURL: "/test" }] },
-//   { item: "Upcoming", links: [{ linkName: "Seasonal", linkURL: "/test" }] },
 
 interface Props {
   user: IntrospectResponse | null;
@@ -76,7 +73,7 @@ const NavBar = ({ user }: Props) => {
               asChild
               className={`${navigationMenuTriggerStyle()} text-lg font-medium"`}
             >
-              <Link href="/about_us"> Contact Us </Link>
+              <Link href="/about"> Contact Us </Link>
             </NavigationMenuLink>
           </NavigationMenuItem>
           {isAdmin && (

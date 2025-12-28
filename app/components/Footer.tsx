@@ -13,10 +13,10 @@ interface FooterDataColumn {
 const contactUs: FooterDataColumn = {
   title: "Contact Us",
   details: [
-    { topic: "Phone: 0769075325", href: "/contact_us/phone" },
+    { topic: "Phone: 0769075325", href: "/about" },
     {
       topic: "Email: vacollection.web.lk@gmail.com",
-      href: "/contact_us/email",
+      href: "/about",
     },
   ],
 };
@@ -24,20 +24,23 @@ const contactUs: FooterDataColumn = {
 const categories: FooterDataColumn = {
   title: "Categories",
   details: [
-    { topic: "Earrings", href: "/categories/all-earrings" },
-    { topic: "Rings", href: "/categories/all-rings" },
-    { topic: "Necklace", href: "/categories/all-necklace" },
-    { topic: "Bracelets", href: "/categories/all-bracelets" },
-    { topic: "Pendants", href: "/categories/all-pendants" },
+    { topic: "Earrings", href: "/products/pages/1?category=EARRING" },
+    { topic: "Rings", href: "/products/pages/1?category=RING" },
+    { topic: "Necklace", href: "/products/pages/1?category=NECKLACE" },
+    { topic: "Bracelets", href: "/products/pages/1?category=BRACELET" },
+    { topic: "Pendants", href: "/products/pages/1?category=PENDANT" },
   ],
 };
 
 const socialMedia: FooterDataColumn = {
   title: "Follow Us On",
   details: [
-    { topic: "/facebook.svg", href: "https://www.facebook.com/vacraft/" },
-    { topic: "/instagram.svg", href: "http://instagram.com/vacraft/" },
-    { topic: "/tiktok.svg", href: "https://www.tiktok.com/discover/vacraft" },
+    { topic: "/facebook.svg", href: "https://www.facebook.com/vacollection/" },
+    { topic: "/instagram.svg", href: "https://instagram.com/vacollection/" },
+    {
+      topic: "/tiktok.svg",
+      href: "https://www.tiktok.com/discover/vacollection",
+    },
   ],
 };
 
