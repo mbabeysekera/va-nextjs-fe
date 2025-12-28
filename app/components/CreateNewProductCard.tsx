@@ -47,12 +47,15 @@ const CreateNewProductCard = () => {
   const [items, setItems] = useState<ItemDetails[]>([]);
 
   const itemHandler = (itemCode: number, stock: number, image: File) => {
+    if (validationStatus !== "valid") {
+      toast.error("Validate item code before add.");
+      return;
+    }
     const item: ItemDetails = {
       item_code: itemCode,
       in_stock: stock,
       image_url: image.name,
     };
-    console.log(image.name);
     setImages((prev) => {
       if (prev.has(itemCode)) {
         toast.error("Item code already exists");
@@ -66,6 +69,7 @@ const CreateNewProductCard = () => {
     setItemCode("");
     setStock("");
     setFileKey((k) => k + 1);
+    setValidationStatus("idle");
   };
 
   const onNextClickHandler = (stage: string) => {
@@ -119,12 +123,17 @@ const CreateNewProductCard = () => {
       );
     }
     if (type === "itemCode") {
+      for (const item of items) {
+        if (item.item_code === parseInt(itemCode)) {
+          setValidationStatus("invalid");
+          return;
+        }
+      }
       validatedProductBySku = await searchByItemCode(parseInt(itemCode, 10));
     }
     setValidationStatus(
       validatedProductBySku.product?.id ? "invalid" : "valid"
     );
-    console.log(validatedProductBySku);
   };
 
   const onSubmitHandler = async () => {
@@ -225,12 +234,16 @@ const CreateNewProductCard = () => {
                   </div>
                   <div className="flex gap-2 items-start">
                     <Input
+                      inputMode="numeric"
+                      pattern="[0-9]*"
                       id="sku"
                       placeholder="XXXXX"
                       required
                       onChange={(e) => {
                         const val = e.target.value;
-                        setSku(val);
+                        if (/^\d*$/.test(val)) {
+                          setSku(val);
+                        }
                         setValidationStatus("idle");
                       }}
                       value={sku}
@@ -260,10 +273,17 @@ const CreateNewProductCard = () => {
                 <Field>
                   <FieldLabel htmlFor="string">Price</FieldLabel>
                   <Input
+                    inputMode="decimal"
+                    pattern="^\d*\.?\d*$"
                     id="price"
                     placeholder="100.00"
                     required
-                    onChange={(e) => setPrice(e.target.value)}
+                    onChange={(e) => {
+                      const val = e.target.value;
+                      if (/^\d*\.?\d{0,2}$/.test(val)) {
+                        setPrice(e.target.value);
+                      }
+                    }}
                     value={price}
                   />
                 </Field>
@@ -304,11 +324,16 @@ const CreateNewProductCard = () => {
                 </div>
                 <div className="flex gap-2 items-start">
                   <Input
+                    inputMode="numeric"
+                    pattern="[0-9]*"
                     id="item_code"
                     placeholder="XXXX"
                     required
                     onChange={(e) => {
-                      setItemCode(e.target.value);
+                      const val = e.target.value;
+                      if (/^\d*$/.test(val)) {
+                        setItemCode(e.target.value);
+                      }
                       setValidationStatus("idle");
                     }}
                     value={itemCode}
@@ -327,10 +352,17 @@ const CreateNewProductCard = () => {
               <Field>
                 <FieldLabel htmlFor="string">In Stock</FieldLabel>
                 <Input
+                  inputMode="numeric"
+                  pattern="[0-9]*"
                   id="in_stock"
                   placeholder="Number of items available"
                   required
-                  onChange={(e) => setStock(e.target.value)}
+                  onChange={(e) => {
+                    const val = e.target.value;
+                    if (/^\d*$/.test(val)) {
+                      setStock(val);
+                    }
+                  }}
                   value={stock}
                   maxLength={6}
                 />
@@ -437,9 +469,7 @@ const CreateNewProductCard = () => {
                   <span className="col-span-1 font-medium text-zinc-600">
                     Price
                   </span>
-                  <span className="col-span-2 font-semibold text-zinc-900">
-                    {price}
-                  </span>
+                  <span className="col-span-2 text-zinc-900">{price}</span>
                 </div>
               </div>
               <FieldSeparator className="my-2" />

@@ -5,7 +5,7 @@ import AddToCartButton from "./AddToCartButton";
 
 const VALogoBar = () => {
   return (
-    <div className="mx-auto max-w-7xl px-6 h-24 flex items-center gap-3">
+    <div className="mx-auto max-w-7xl px-6 h-24 mb-4 flex items-center gap-3">
       <Link href="/" className="flex items-center">
         <Image
           src="/app_logo.png"

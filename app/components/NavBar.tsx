@@ -48,7 +48,7 @@ const NavBar = ({ user }: Props) => {
     isAdmin = true;
   }
   return (
-    <div className="flex items-center justify-center mx-auto max-w-7xl px-6 py-1 relative z-50">
+    <div className="flex items-center justify-center mx-auto max-w-7xl px-6 py-1 mb-8 relative z-50">
       <NavigationMenu viewport={false}>
         <NavigationMenuList className="flex-wrap">
           {menuItems.map((menuItem) => (
