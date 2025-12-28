@@ -25,7 +25,7 @@ const ProductPaginatedPage = async ({
     cache: "no-store",
   });
   const products: ProductList = await res.json();
-  const pageCount = Math.ceil(products.count / 10);
+  const pageCount = 2; //Math.ceil(products.count / 10);
   return (
     <ProductListCard
       productList={products}
