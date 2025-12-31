@@ -26,7 +26,8 @@ export const POST = async (req: NextRequest): Promise<NextResponse> => {
     name: "access_token",
     value: accessToken,
     httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
+    secure: true,
+    sameSite: "lax",
     path: "/",
   });
 
