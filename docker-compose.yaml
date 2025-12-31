@@ -1,0 +1,23 @@
+services:
+  frontend:
+    build:
+      context: .
+      args:
+        - BACKEND_URL=${BACKEND_URL}
+        - API_BASE_URL=${API_BASE_URL}
+        - CDN_URL=${CDN_URL}
+        - CDN_KEY=${CDN_KEY}
+    container_name: nextjs-app
+    restart: always
+    environment:
+      - NODE_ENV=production
+      - BACKEND_URL=${BACKEND_URL}
+      - API_BASE_URL=${API_BASE_URL}
+      - CDN_URL=${CDN_URL}
+      - CDN_KEY=${CDN_KEY}
+    networks:
+      - postgres_vac-net
+
+networks:
+  postgres_vac-net:
+    external: true
