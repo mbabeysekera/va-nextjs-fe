@@ -43,6 +43,7 @@ const ProductSelectImageGallery = ({ productDetails }: Props) => {
             }`}
             priority
             onClick={() => setSelected(index)}
+            unoptimized
           />
         ))}
       </div>
@@ -54,6 +55,7 @@ const ProductSelectImageGallery = ({ productDetails }: Props) => {
           height={620}
           className="rounded-lg"
           priority
+          unoptimized
         />
       </div>
       <div className="flex flex-col w-140">
