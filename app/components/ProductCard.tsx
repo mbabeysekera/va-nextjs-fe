@@ -68,6 +68,7 @@ const ProductCard = ({ title, brand, description, price, items }: Props) => {
                   height={225}
                   className="rounded-lg"
                   priority
+                  unoptimized
                 />
               </CarouselItem>
             ))}
