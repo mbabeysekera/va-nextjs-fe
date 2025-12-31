@@ -2,7 +2,6 @@ import { introspectAdmin, IntrospectResponse } from "@/lib/auth/introspect";
 import ProductPage from "./(site)/products/page";
 import Footer from "./components/Footer";
 import NavBar from "./components/NavBar";
-import AppPagination from "./components/AppPagination";
 
 const Home = async () => {
   const userInstrospect: IntrospectResponse | null = await introspectAdmin();
