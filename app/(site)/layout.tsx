@@ -1,13 +1,13 @@
 import Footer from "@/app/components/Footer";
 import NavBar from "@/app/components/NavBar";
-import { introspectAdmin, IntrospectResponse } from "@/lib/auth/introspect";
+import { introspectUser, IntrospectResponse } from "@/lib/auth/introspect";
 
 export default async function GeneralSiteLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const userInstrospect: IntrospectResponse | null = await introspectAdmin();
+  const userInstrospect: IntrospectResponse | null = await introspectUser();
   return (
     <section>
       <NavBar user={userInstrospect} />

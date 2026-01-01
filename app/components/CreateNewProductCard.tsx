@@ -209,6 +209,8 @@ const CreateNewProductCard = () => {
                       <SelectItem value="NECKLACE">NECKLACE</SelectItem>
                       <SelectItem value="BRACELET">BRACELET</SelectItem>
                       <SelectItem value="PENDANT">PENDANT</SelectItem>
+                      <SelectItem value="SETS">SETS</SelectItem>
+                      <SelectItem value="OTHER">OTHER</SelectItem>
                     </SelectContent>
                   </Select>
                 </Field>

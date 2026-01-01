@@ -6,6 +6,7 @@ import { cache } from "react";
 export interface IntrospectResponse {
   status: "SUCCESS" | "FAILURE";
   id: number;
+  full_name: string;
   role: "ADMIN" | "USER" | "MODERATOR";
   time: Date;
 }
@@ -36,4 +37,4 @@ const introspect = async (): Promise<IntrospectResponse | null> => {
   return responseToUI;
 };
 
-export const introspectAdmin = cache(introspect);
+export const introspectUser = cache(introspect);

@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import VALogoBar from "./components/VALogoBar";
 import { Toaster } from "sonner";
+import { AppContextInterface, AppContextProvider } from "./AppContext";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -24,18 +25,21 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const appContext: AppContextInterface = { username: "", isLoggedIn: false };
   return (
     <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <header className="relative z-50">
-          <VALogoBar />
-        </header>
-        <main className="flex-1">
-          <div>{children}</div>
-          <Toaster richColors position="top-right" />
-        </main>
+        <AppContextProvider context={appContext}>
+          <header className="relative z-50">
+            <VALogoBar />
+          </header>
+          <main className="flex-1">
+            <div>{children}</div>
+            <Toaster richColors position="top-right" />
+          </main>
+        </AppContextProvider>
       </body>
     </html>
   );

@@ -35,4 +35,6 @@ type ProductCategory =
   | "BRACELET"
   | "NECKLACE"
   | "RING"
+  | "SETS"
+  | "OTHER"
   | "NONE";
