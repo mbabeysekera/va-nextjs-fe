@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import LoginLogoButton from "./LoginLogoButton";
 import AddToCartButton from "./AddToCartButton";
+import LogoBarWidgets from "./LogoBarWidgets";
 
 const VALogoBar = () => {
   return (
@@ -23,14 +24,7 @@ const VALogoBar = () => {
         height={92}
         className="self-end pb-3 h-auto w-auto"
       />
-      <div className=" flex ml-auto self-end pb-3 gap-3">
-        <Link href="/login">
-          <LoginLogoButton />
-        </Link>
-        <Link href="/upcoming">
-          <AddToCartButton />
-        </Link>
-      </div>
+      <LogoBarWidgets />
     </div>
   );
 };

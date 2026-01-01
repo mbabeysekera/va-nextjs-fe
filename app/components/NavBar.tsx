@@ -26,6 +26,8 @@ const menuItems: { item: string; links: NavBarItemLinks[] }[] = [
       { linkName: "Necklace", linkURL: "/products/pages/1?category=NECKLACE" },
       { linkName: "Bracelets", linkURL: "/products/pages/1?category=BRACELET" },
       { linkName: "Pendants", linkURL: "/products/pages/1?category=PENDANT" },
+      { linkName: "Sets", linkURL: "/products/pages/1?category=SETS" },
+      { linkName: "Other", linkURL: "/products/pages/1?category=OTHER" },
     ],
   },
   {

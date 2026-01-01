@@ -6,6 +6,7 @@ import ProductSearchCard from "@/app/components/ProductSearchCard";
 import ProfileCard from "@/app/components/ProfileCard";
 import SettingsControl from "@/app/components/SettingsControl";
 import { useState } from "react";
+import { useAdmin } from "../AdminContext";
 
 const tabs: SideBarTabs[] = [
   {
@@ -31,11 +32,12 @@ const tabs: SideBarTabs[] = [
 ];
 
 const Dashboard = () => {
+  const admin = useAdmin();
   const [selectedTab, setSelectedTab] = useState(tabs[0].key);
   return (
     <div className="flex flex-row w-full h-full">
       <AppSidebar
-        username="Buddhika Abeysekera"
+        username={admin.full_name}
         tabs={tabs}
         selectedTab={selectedTab}
         onTabSelect={setSelectedTab}

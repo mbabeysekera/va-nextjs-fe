@@ -1,20 +1,21 @@
 import { redirect } from "next/navigation";
-import { introspectAdmin, IntrospectResponse } from "../../lib/auth/introspect";
+import { introspectUser, IntrospectResponse } from "../../lib/auth/introspect";
+import { AdminProvider } from "./AdminContext";
 
 export default async function AdminPagesLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const instrospectRes: IntrospectResponse | null = await introspectAdmin();
+  const instrospectRes: IntrospectResponse | null = await introspectUser();
   if (instrospectRes === null || instrospectRes.role !== "ADMIN") {
-    redirect("/unauthorized");
+    redirect("/login");
   }
 
   return (
     <section>
       <div className="flex items-center mx-auto max-w-7xl px-6 py-1">
-        {children}
+        <AdminProvider value={instrospectRes}>{children}</AdminProvider>
       </div>
     </section>
   );

@@ -1,10 +1,10 @@
-import { introspectAdmin, IntrospectResponse } from "@/lib/auth/introspect";
+import { IntrospectResponse, introspectUser } from "@/lib/auth/introspect";
 import ProductPage from "./(site)/products/page";
 import Footer from "./components/Footer";
 import NavBar from "./components/NavBar";
 
 const Home = async () => {
-  const userInstrospect: IntrospectResponse | null = await introspectAdmin();
+  const userInstrospect: IntrospectResponse | null = await introspectUser();
   return (
     <>
       <NavBar user={userInstrospect} />

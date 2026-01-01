@@ -9,7 +9,7 @@ const LoginLogoButton = () => {
   return (
     <Tooltip>
       <TooltipTrigger asChild>
-        <Button variant="ghost" size="icon" aria-label="Login">
+        <Button variant="ghost" size="icon" aria-label="Login" className="w-20">
           <Image
             src="/login.svg"
             alt=""
@@ -17,6 +17,7 @@ const LoginLogoButton = () => {
             height={30}
             className="opacity-80"
           />
+          <div>Login</div>
         </Button>
       </TooltipTrigger>
       <TooltipContent>

@@ -2,11 +2,13 @@
 import { useState } from "react";
 import LoginDetailsCard from "../../components/LoginDetailsCard";
 import { useRouter } from "next/navigation";
+import { useAppContext } from "@/app/AppContext";
 
 const LoginPage = () => {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const { setAppContext } = useAppContext();
 
   const login = async (mobileNo: string, password: string) => {
     setLoading(true);
@@ -24,6 +26,12 @@ const LoginPage = () => {
       setLoading(false);
       return;
     }
+
+    setAppContext((prev) => ({
+      ...prev,
+      username: mobileNo,
+      isLoggedIn: true,
+    }));
 
     router.push("/");
   };
