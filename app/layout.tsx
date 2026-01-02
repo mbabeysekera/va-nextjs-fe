@@ -4,6 +4,7 @@ import "./globals.css";
 import VALogoBar from "./components/VALogoBar";
 import { Toaster } from "sonner";
 import { AppContextInterface, AppContextProvider } from "./AppContext";
+import { IntrospectResponse, introspectUser } from "@/lib/auth/introspect";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -37,12 +38,26 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const appContext: AppContextInterface = { username: "", isLoggedIn: false };
+  const appContext: AppContextInterface = {
+    username: "",
+    isLoggedIn: false,
+    userID: 0,
+    userRole: "NONE",
+  };
+
+  const userInstrospect: IntrospectResponse | null = await introspectUser();
+  if (userInstrospect) {
+    appContext.isLoggedIn = true;
+    appContext.username = userInstrospect.full_name;
+    appContext.userID = userInstrospect.id;
+    appContext.userRole = userInstrospect.role;
+  }
+
   return (
     <html lang="en">
       <body

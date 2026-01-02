@@ -8,9 +8,9 @@ import {
   NavigationMenuTrigger,
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
-import { IntrospectResponse } from "@/lib/auth/introspect";
 import Image from "next/image";
 import Link from "next/link";
+import { useAppContext } from "../AppContext";
 
 interface NavBarItemLinks {
   linkName: string;
@@ -37,15 +37,8 @@ const menuItems: { item: string; links: NavBarItemLinks[] }[] = [
   { item: "Upcoming", links: [{ linkName: "Seasonal", linkURL: "/upcoming" }] },
 ];
 
-interface Props {
-  user: IntrospectResponse | null;
-}
-
-const NavBar = ({ user }: Props) => {
-  var isAdmin = false;
-  if (user && (user.role === "ADMIN" || user.role === "MODERATOR")) {
-    isAdmin = true;
-  }
+const NavBar = () => {
+  const appContext = useAppContext();
   return (
     <div className="flex items-center justify-center mx-auto max-w-7xl px-6 py-1 mb-8 relative z-50">
       <NavigationMenu viewport={false}>
@@ -78,7 +71,7 @@ const NavBar = ({ user }: Props) => {
               <Link href="/about"> Contact Us </Link>
             </NavigationMenuLink>
           </NavigationMenuItem>
-          {isAdmin && (
+          {appContext.currentContext.isLoggedIn && (
             <NavigationMenuItem key="About Us">
               <NavigationMenuLink
                 asChild

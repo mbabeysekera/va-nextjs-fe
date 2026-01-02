@@ -9,7 +9,12 @@ const LoginLogoButton = () => {
   return (
     <Tooltip>
       <TooltipTrigger asChild>
-        <Button variant="ghost" size="icon" aria-label="Login" className="w-20">
+        <Button
+          variant="outline"
+          size="icon"
+          aria-label="Login"
+          className="w-24"
+        >
           <Image
             src="/login.svg"
             alt=""
