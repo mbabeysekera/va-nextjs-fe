@@ -3,9 +3,9 @@ import { useState } from "react";
 import LoginDetailsCard from "../../components/LoginDetailsCard";
 import { useRouter } from "next/navigation";
 import { useAppContext } from "@/app/AppContext";
+import { handleLoginSync } from "@/lib/auth/revalidation";
 
 const LoginPage = () => {
-  const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const { setAppContext } = useAppContext();
@@ -27,13 +27,18 @@ const LoginPage = () => {
       return;
     }
 
+    const userRequiredFields: UserRequiredFields = await res.json();
+
     setAppContext((prev) => ({
       ...prev,
-      username: mobileNo,
       isLoggedIn: true,
+      userID: userRequiredFields.id,
+      username: userRequiredFields.full_name,
+      userRole: userRequiredFields.role,
     }));
-
-    router.push("/");
+    // await handleLoginSync("/", "layout");
+    // router.push("/");
+    window.location.href = "/";
   };
 
   const signUp = async () => {

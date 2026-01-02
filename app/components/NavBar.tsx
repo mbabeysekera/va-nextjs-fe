@@ -1,4 +1,4 @@
-"use client";
+// "use client";
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -8,9 +8,7 @@ import {
   NavigationMenuTrigger,
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
-import Image from "next/image";
 import Link from "next/link";
-import { useAppContext } from "../AppContext";
 
 interface NavBarItemLinks {
   linkName: string;
@@ -38,7 +36,6 @@ const menuItems: { item: string; links: NavBarItemLinks[] }[] = [
 ];
 
 const NavBar = () => {
-  const appContext = useAppContext();
   return (
     <div className="flex items-center justify-center mx-auto max-w-7xl px-6 py-1 mb-8 relative z-50">
       <NavigationMenu viewport={false}>
@@ -71,27 +68,6 @@ const NavBar = () => {
               <Link href="/about"> Contact Us </Link>
             </NavigationMenuLink>
           </NavigationMenuItem>
-          {appContext.currentContext.isLoggedIn && (
-            <NavigationMenuItem key="About Us">
-              <NavigationMenuLink
-                asChild
-                className={`${navigationMenuTriggerStyle()} text-lg font-medium"`}
-              >
-                <Link href="/dashboard">
-                  <div className="flex items-center">
-                    <Image
-                      src="/admin_dashboard.svg"
-                      alt=""
-                      width={30}
-                      height={30}
-                      className="opacity-80"
-                    />
-                    <p className="">Admin Dashboard</p>
-                  </div>
-                </Link>
-              </NavigationMenuLink>
-            </NavigationMenuItem>
-          )}
         </NavigationMenuList>
       </NavigationMenu>
     </div>

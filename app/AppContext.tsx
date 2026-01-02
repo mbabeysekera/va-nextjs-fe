@@ -5,7 +5,7 @@ import React, { createContext, useContext, useState } from "react";
 export interface AppContextInterface {
   username: string;
   isLoggedIn: boolean;
-  userRole: "ADMIN" | "USER" | "MODERATOR" | "NONE";
+  userRole: UserRole | "NONE";
   userID: number;
 }
 

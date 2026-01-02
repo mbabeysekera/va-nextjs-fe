@@ -1,7 +1,5 @@
 import Image from "next/image";
 import Link from "next/link";
-import LoginLogoButton from "./LoginLogoButton";
-import AddToCartButton from "./AddToCartButton";
 import LogoBarWidgets from "./LogoBarWidgets";
 
 const VALogoBar = () => {

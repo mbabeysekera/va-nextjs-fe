@@ -7,7 +7,7 @@ export interface IntrospectResponse {
   status: "SUCCESS" | "FAILURE";
   id: number;
   full_name: string;
-  role: "ADMIN" | "USER" | "MODERATOR";
+  role: UserRole;
   time: Date;
 }
 
