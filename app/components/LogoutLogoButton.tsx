@@ -29,10 +29,10 @@ const LogoutLogoButton = () => {
     <Tooltip>
       <TooltipTrigger asChild>
         <Button
-          variant="ghost"
+          variant="outline"
           size="icon"
           aria-label="Logout"
-          className="w-20"
+          className="w-24"
           onClick={logout}
         >
           <Image

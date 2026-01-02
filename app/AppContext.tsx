@@ -5,10 +5,12 @@ import React, { createContext, useContext, useState } from "react";
 export interface AppContextInterface {
   username: string;
   isLoggedIn: boolean;
+  userRole: "ADMIN" | "USER" | "MODERATOR" | "NONE";
+  userID: number;
 }
 
 type AppContextType = {
-  initialContext: AppContextInterface;
+  currentContext: AppContextInterface;
   setAppContext: React.Dispatch<React.SetStateAction<AppContextInterface>>;
 };
 
@@ -22,7 +24,7 @@ const AppContext = createContext<AppContextType | null>(null);
 export const AppContextProvider = ({ context, children }: AppContextProps) => {
   const [ctx, setCtx] = useState(context);
   return (
-    <AppContext.Provider value={{ initialContext: ctx, setAppContext: setCtx }}>
+    <AppContext.Provider value={{ currentContext: ctx, setAppContext: setCtx }}>
       {children}
     </AppContext.Provider>
   );
