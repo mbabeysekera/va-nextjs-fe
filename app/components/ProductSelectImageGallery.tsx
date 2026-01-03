@@ -73,12 +73,12 @@ const ProductSelectImageGallery = ({ productDetails }: Props) => {
           Rs {productDetails.product.price.toFixed(2)}
         </p>
         <p className="text-sm font-bold text-muted-foreground p-2">
-          Item Code: {productDetails.items[selected].item_code}
+          Product ID: {productDetails.product.id}
         </p>
         <p className="text-sm text-muted-foreground p-2">
           In Stock: {productDetails.items[selected].in_stock}
         </p>
-        <div>
+        {/* <div>
           <ButtonGroup>
             <Button
               size="icon"
@@ -100,7 +100,7 @@ const ProductSelectImageGallery = ({ productDetails }: Props) => {
               <IconPlus />
             </Button>
           </ButtonGroup>
-        </div>
+        </div> */}
       </div>
     </div>
   );

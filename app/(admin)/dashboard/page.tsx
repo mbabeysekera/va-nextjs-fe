@@ -14,16 +14,16 @@ const tabs: SideBarTabs[] = [
     key: "dashboard",
   },
   {
-    title: "Profile",
-    key: "profile",
-  },
-  {
     title: "Products",
     key: "products",
   },
   {
     title: "Search",
     key: "search",
+  },
+  {
+    title: "Profile",
+    key: "profile",
   },
   {
     title: "Settings",
@@ -43,9 +43,9 @@ const Dashboard = () => {
         onTabSelect={setSelectedTab}
       />
       {selectedTab === tabs[0].key && <DashboardCard />}
-      {selectedTab === tabs[1].key && <ProfileCard />}
-      {selectedTab === tabs[2].key && <ProductControl />}
-      {selectedTab === tabs[3].key && <ProductSearchCard />}
+      {selectedTab === tabs[1].key && <ProductControl />}
+      {selectedTab === tabs[2].key && <ProductSearchCard />}
+      {selectedTab === tabs[3].key && <ProfileCard />}
       {selectedTab === tabs[4].key && <SettingsControl />}
     </div>
   );
