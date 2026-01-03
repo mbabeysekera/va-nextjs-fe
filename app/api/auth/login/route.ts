@@ -21,7 +21,14 @@ export const POST = async (req: NextRequest): Promise<NextResponse> => {
 
   const loginResponse: LoginResponse = await res.json();
   const accessToken = loginResponse.access_token;
-  const response = NextResponse.json({ success: true });
+  const response = NextResponse.json({
+    success: true,
+    user: {
+      full_name: loginResponse.full_name,
+      id: loginResponse.id,
+      role: loginResponse.role,
+    } as UserRequiredFields,
+  });
   response.cookies.set({
     name: "access_token",
     value: accessToken,

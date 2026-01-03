@@ -1,4 +1,5 @@
 "use client";
+import { useAppContext } from "@/app/AppContext";
 import { AppSidebar, SideBarTabs } from "@/app/components/AppSidebar";
 import DashboardCard from "@/app/components/DashboardCard";
 import ProductControl from "@/app/components/ProductControl";
@@ -6,7 +7,6 @@ import ProductSearchCard from "@/app/components/ProductSearchCard";
 import ProfileCard from "@/app/components/ProfileCard";
 import SettingsControl from "@/app/components/SettingsControl";
 import { useState } from "react";
-import { useAdmin } from "../AdminContext";
 
 const tabs: SideBarTabs[] = [
   {
@@ -32,12 +32,12 @@ const tabs: SideBarTabs[] = [
 ];
 
 const Dashboard = () => {
-  const admin = useAdmin();
+  const user = useAppContext();
   const [selectedTab, setSelectedTab] = useState(tabs[0].key);
   return (
     <div className="flex flex-row w-full h-full">
       <AppSidebar
-        username={admin.full_name}
+        username={user.currentContext.username}
         tabs={tabs}
         selectedTab={selectedTab}
         onTabSelect={setSelectedTab}

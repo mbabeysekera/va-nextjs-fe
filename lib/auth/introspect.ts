@@ -7,7 +7,7 @@ export interface IntrospectResponse {
   status: "SUCCESS" | "FAILURE";
   id: number;
   full_name: string;
-  role: "ADMIN" | "USER" | "MODERATOR";
+  role: UserRole;
   time: Date;
 }
 
@@ -16,7 +16,7 @@ const introspect = async (): Promise<IntrospectResponse | null> => {
   if (!token) {
     return null;
   }
-  const instrospectAPI = `${process.env.BACKEND_URL}${process.env.API_BASE_URL}/moderator/introspect`;
+  const instrospectAPI = `${process.env.BACKEND_URL}${process.env.API_BASE_URL}/app/introspect`;
   const res = await fetch(instrospectAPI, {
     method: "GET",
     headers: {
@@ -28,7 +28,6 @@ const introspect = async (): Promise<IntrospectResponse | null> => {
   if (!res.ok) {
     return null;
   }
-
   const responseToUI: IntrospectResponse = await res.json();
   if (responseToUI.status !== "SUCCESS") {
     return null;
