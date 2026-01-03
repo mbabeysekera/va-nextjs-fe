@@ -21,6 +21,7 @@ const ModifyExistingProductCard = () => {
     }
     const product: ProductDetails = await res.json();
     setProductDetails(product);
+    setProductID("");
     toast.success("Product fetched from the system");
   };
 
@@ -56,8 +57,8 @@ const ModifyExistingProductCard = () => {
       {productDetails && (
         <div className="mt-4">
           <ProductModifyCard
-            items={productDetails.items}
-            product={productDetails.product}
+            productDetails={productDetails}
+            setProductDetails={setProductDetails}
           />
         </div>
       )}

@@ -1,3 +1,4 @@
+import NoLongerAvailableProductCard from "@/app/components/NoLongerAvailableProductCard";
 import ProductSelectImageGallery from "@/app/components/ProductSelectImageGallery";
 
 interface PageProps {
@@ -14,6 +15,9 @@ const ProductSelectPage = async ({ params }: PageProps) => {
 
   const product: ProductDetails = await res.json();
 
+  if (!res.ok) {
+    return <NoLongerAvailableProductCard />;
+  }
   return <ProductSelectImageGallery productDetails={product} />;
 };
 
