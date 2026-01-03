@@ -2,7 +2,7 @@ import ProductPage from "./(site)/products/page";
 import Footer from "./components/Footer";
 import NavBar from "./components/NavBar";
 
-const Home = async () => {
+const Home = () => {
   return (
     <>
       <NavBar />
