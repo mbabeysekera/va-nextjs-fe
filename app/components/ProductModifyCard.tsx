@@ -18,10 +18,32 @@ interface Props {
 
 const ProductModifyCard = ({ productDetails, setProductDetails }: Props) => {
   const [price, setPrice] = useState(productDetails.product.price.toFixed(2));
-  const [inStock, setInStock] = useState(productDetails.product.in_stock);
+  const [inStock, setInStock] = useState(
+    productDetails.product.in_stock.toString()
+  );
   const [isEditable, setIsEditable] = useState(false);
 
-  const modifyProductByID = async () => {};
+  const modifyProductByID = async () => {
+    const productToBeUpdated: ProductUpdateDetails = {
+      id: productDetails.product.id ?? 0,
+      in_stock: parseInt(inStock),
+      price: parseFloat(price),
+    };
+
+    const res = await fetch("/api/product/update", {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(productToBeUpdated),
+      cache: "no-store",
+    });
+
+    if (!res.ok) {
+      toast.error("Error while delete operation.");
+    }
+    setProductDetails(null);
+    setIsEditable(false);
+    toast.success("Product updated successfully.");
+  };
 
   const deleteProductByID = async () => {
     const res = await fetch(
@@ -86,12 +108,11 @@ const ProductModifyCard = ({ productDetails, setProductDetails }: Props) => {
                 inputMode="numeric"
                 pattern="[0-9]*"
                 id="in_stock"
-                placeholder="Number of items available"
                 required
                 onChange={(e) => {
                   const val = e.target.value;
                   if (/^\d*$/.test(val)) {
-                    setInStock(parseInt(val));
+                    setInStock(val);
                   }
                 }}
                 value={inStock}

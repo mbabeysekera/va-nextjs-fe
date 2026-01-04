@@ -37,3 +37,9 @@ type ProductCategory =
   | "SETS"
   | "OTHER"
   | "NONE";
+
+interface ProductUpdateDetails {
+  id: number;
+  in_stock?: number;
+  price?: number;
+}
