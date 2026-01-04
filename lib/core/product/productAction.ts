@@ -1,8 +1,8 @@
 export const createProduct = async (
   product: ProductWithItems,
-  images: Map<number, File>
+  images: File[]
 ): Promise<boolean> => {
-  for (const [key, file] of images) {
+  for (const file of images) {
     if (file) {
       const formData = new FormData();
       formData.append("image", file);
@@ -15,9 +15,7 @@ export const createProduct = async (
       }
       const data: { url: string } = await res.json();
       for (const item of product.items) {
-        if (item.item_code === key) {
-          item.image_url = data.url;
-        }
+        item.image_url = data.url;
       }
     } else {
       return false;

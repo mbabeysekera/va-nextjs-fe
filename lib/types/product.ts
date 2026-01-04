@@ -1,8 +1,6 @@
 interface ItemDetails {
   id?: number;
   product_id?: number;
-  item_code: number;
-  in_stock: number;
   image_url: string;
   created_at?: Date;
 }
@@ -14,6 +12,7 @@ interface Product {
   category: string;
   sku: string;
   description: string;
+  in_stock: number;
   price: number;
   created_at?: Date;
 }

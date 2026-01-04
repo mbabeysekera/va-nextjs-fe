@@ -39,35 +39,25 @@ const CreateNewProductCard = () => {
     "idle" | "checking" | "valid" | "invalid"
   >("idle");
 
-  const [itemCode, setItemCode] = useState("");
   const [stock, setStock] = useState("");
   const [fileKey, setFileKey] = useState(0);
   const [image, setImage] = useState<File | null>(null);
-  const [imageMap, setImages] = useState<Map<number, File>>(new Map());
+  const [imageMap, setImages] = useState<File[]>([]);
   const [items, setItems] = useState<ItemDetails[]>([]);
 
-  const itemHandler = (itemCode: number, stock: number, image: File) => {
+  const itemHandler = (image: File) => {
     if (validationStatus !== "valid") {
-      toast.error("Validate item code before add.");
+      toast.error("Add at least one image.");
       return;
     }
     const item: ItemDetails = {
-      item_code: itemCode,
-      in_stock: stock,
       image_url: image.name,
     };
     setImages((prev) => {
-      if (prev.has(itemCode)) {
-        toast.error("Item code already exists");
-        return prev;
-      }
-      const next = new Map(prev);
-      next.set(itemCode, image);
-      return next;
+      prev.push(image);
+      return prev;
     });
     setItems((items) => [...items, item]);
-    setItemCode("");
-    setStock("");
     setFileKey((k) => k + 1);
     setValidationStatus("idle");
   };
@@ -81,6 +71,7 @@ const CreateNewProductCard = () => {
         sku === "" ||
         description === "" ||
         price === "" ||
+        stock === "" ||
         validationStatus !== "valid"
       ) {
         toast.error("All product fields are required");
@@ -103,9 +94,10 @@ const CreateNewProductCard = () => {
     setCategory("NONE");
     setSku("");
     setDescription("");
+    setStock("");
     setPrice("");
     setItems([]);
-    setImages(new Map());
+    setImages([]);
     setStage("product");
     setValidationStatus("idle");
   };
@@ -122,15 +114,6 @@ const CreateNewProductCard = () => {
         `${category.substring(0, 3)}-${sku}`
       );
     }
-    if (type === "itemCode") {
-      for (const item of items) {
-        if (item.item_code === parseInt(itemCode)) {
-          setValidationStatus("invalid");
-          return;
-        }
-      }
-      validatedProductBySku = await searchByItemCode(parseInt(itemCode, 10));
-    }
     setValidationStatus(
       validatedProductBySku.product?.id ? "invalid" : "valid"
     );
@@ -144,6 +127,7 @@ const CreateNewProductCard = () => {
       sku: `${category.substring(0, 3)}-${sku}`,
       description,
       price: parseFloat(price),
+      in_stock: parseInt(stock),
       items: items,
     };
     const status = await createProduct(productWithItems, imageMap);
@@ -289,6 +273,24 @@ const CreateNewProductCard = () => {
                     value={price}
                   />
                 </Field>
+                <Field>
+                  <FieldLabel htmlFor="string">In Stock</FieldLabel>
+                  <Input
+                    inputMode="numeric"
+                    pattern="[0-9]*"
+                    id="in_stock"
+                    placeholder="Number of items available"
+                    required
+                    onChange={(e) => {
+                      const val = e.target.value;
+                      if (/^\d*$/.test(val)) {
+                        setStock(val);
+                      }
+                    }}
+                    value={stock}
+                    maxLength={6}
+                  />
+                </Field>
                 <div className="flex flex-row justify-end">
                   <Button
                     type="button"
@@ -307,69 +309,6 @@ const CreateNewProductCard = () => {
                 Add each item with all the required details.
               </FieldDescription>
               <Field>
-                <div className="flex flex-row items-center">
-                  <FieldLabel htmlFor="string">Item Code</FieldLabel>
-                  <p
-                    className={cn(
-                      "ml-2 text-sm font-semibold transition-opacity",
-                      validationStatus === "valid"
-                        ? "text-green-500 opacity-100"
-                        : validationStatus === "invalid"
-                        ? "text-red-500 opacity-100"
-                        : "opacity-0"
-                    )}
-                  >
-                    {validationStatus === "valid"
-                      ? "Item Code is available!"
-                      : "Item Code is already in use!"}
-                  </p>
-                </div>
-                <div className="flex gap-2 items-start">
-                  <Input
-                    inputMode="numeric"
-                    pattern="[0-9]*"
-                    id="item_code"
-                    placeholder="XXXX"
-                    required
-                    onChange={(e) => {
-                      const val = e.target.value;
-                      if (/^\d*$/.test(val)) {
-                        setItemCode(e.target.value);
-                      }
-                      setValidationStatus("idle");
-                    }}
-                    value={itemCode}
-                    maxLength={10}
-                  />
-                  <Button
-                    disabled={!itemCode || validationStatus === "checking"}
-                    variant={"outline"}
-                    onClick={() => onValidationCheck("itemCode")}
-                    type="button"
-                  >
-                    Check
-                  </Button>
-                </div>
-              </Field>
-              <Field>
-                <FieldLabel htmlFor="string">In Stock</FieldLabel>
-                <Input
-                  inputMode="numeric"
-                  pattern="[0-9]*"
-                  id="in_stock"
-                  placeholder="Number of items available"
-                  required
-                  onChange={(e) => {
-                    const val = e.target.value;
-                    if (/^\d*$/.test(val)) {
-                      setStock(val);
-                    }
-                  }}
-                  value={stock}
-                  maxLength={6}
-                />
-              </Field>
-              <Field>
                 <FieldLabel htmlFor="string">Upload Image</FieldLabel>
                 <Input
                   key={fileKey}
@@ -382,16 +321,14 @@ const CreateNewProductCard = () => {
                     if (!file) {
                       return;
                     }
+                    setValidationStatus("valid");
                     setImage(file);
                   }}
                 />
               </Field>
               <Field>
                 {items.length > 0 && (
-                  <ItemTable
-                    headers={["Item Code", "In Stock", "Image"]}
-                    items={items}
-                  />
+                  <ItemTable headers={["Image"]} items={items} />
                 )}
               </Field>
               <div className="mt-2 flex items-center justify-between border-t border-zinc-200 pt-4">
@@ -410,15 +347,12 @@ const CreateNewProductCard = () => {
                     type="button"
                     variant="outline"
                     onClick={() => {
-                      if (!itemCode || !stock || !image) {
+                      if (!image) {
                         toast.error("All item fields are required");
                         return;
                       }
-                      itemHandler(
-                        parseInt(itemCode, 10),
-                        parseInt(stock, 10),
-                        image as File
-                      );
+                      setValidationStatus("valid");
+                      itemHandler(image as File);
                     }}
                   >
                     Add Item
@@ -457,8 +391,17 @@ const CreateNewProductCard = () => {
                   <span className="col-span-1 font-medium text-zinc-600">
                     Stock Keeping Unit
                   </span>
+
                   <span className="col-span-2 font-mono text-zinc-900">
                     {`${category.substring(0, 3)}-${sku}`}
+                  </span>
+
+                  <span className="col-span-1 font-medium text-zinc-600">
+                    In Stock
+                  </span>
+
+                  <span className="col-span-2 font-mono text-zinc-900">
+                    {stock}
                   </span>
 
                   <span className="col-span-1 font-medium text-zinc-600">
@@ -476,10 +419,7 @@ const CreateNewProductCard = () => {
               </div>
               <FieldSeparator className="my-2" />
               {items.length > 0 && (
-                <ItemTable
-                  headers={["Item Code", "In Stock", "Image"]}
-                  items={items}
-                />
+                <ItemTable headers={["Image"]} items={items} />
               )}
               <div className="mt-6 flex items-center justify-between border-t border-zinc-200 pt-4">
                 <Button
@@ -533,15 +473,11 @@ const ItemTable = ({ headers, items }: ItemTableProps) => {
         </thead>
 
         <tbody>
-          {items.map((item) => (
+          {items.map((item, index) => (
             <tr
-              key={item.item_code}
+              key={index}
               className="border-b border-zinc-100 last:border-0 hover:bg-zinc-50 transition-colors"
             >
-              <td className="px-4 py-3 font-mono text-zinc-900">
-                {item.item_code}
-              </td>
-              <td className="px-4 py-3 text-zinc-700">{item.in_stock}</td>
               <td className="px-4 py-3 text-zinc-500 truncate max-w-50">
                 {item.image_url}
               </td>
