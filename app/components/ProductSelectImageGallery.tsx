@@ -50,7 +50,7 @@ const ProductSelectImageGallery = ({ productDetails }: Props) => {
       <div className="flex w-200">
         <Image
           src={productDetails.items[selected].image_url}
-          alt={productDetails.items[selected].id.toString()}
+          alt={productDetails.items[selected].image_url}
           width={620}
           height={620}
           className="rounded-lg"
