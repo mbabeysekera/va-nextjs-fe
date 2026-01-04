@@ -17,7 +17,34 @@ interface Props {
 }
 
 const ProductModifyCard = ({ productDetails, setProductDetails }: Props) => {
-  const [price, setPrice] = useState("");
+  const [price, setPrice] = useState(productDetails.product.price.toFixed(2));
+  const [inStock, setInStock] = useState(
+    productDetails.product.in_stock.toString()
+  );
+  const [isEditable, setIsEditable] = useState(false);
+
+  const modifyProductByID = async () => {
+    const productToBeUpdated: ProductUpdateDetails = {
+      id: productDetails.product.id ?? 0,
+      in_stock: parseInt(inStock),
+      price: parseFloat(price),
+    };
+
+    const res = await fetch("/api/product/update", {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(productToBeUpdated),
+      cache: "no-store",
+    });
+
+    if (!res.ok) {
+      toast.error("Error while delete operation.");
+    }
+    setProductDetails(null);
+    setIsEditable(false);
+    toast.success("Product updated successfully.");
+  };
+
   const deleteProductByID = async () => {
     const res = await fetch(
       `/api/product/delete/${productDetails.product.id}`,
@@ -32,11 +59,12 @@ const ProductModifyCard = ({ productDetails, setProductDetails }: Props) => {
     setProductDetails(null);
     toast.success("Product successfully deleted.");
   };
+
   return (
     <Card className="flex transition-shadow hover:shadow-md py-2">
-      <CardContent className="flex px-2 h-full w-full">
-        <div className="p-2">
-          <div className="grid grid-cols-3 gap-x-2 gap-y-2 text-sm">
+      <CardContent className="flex px-2 h-full w-full justify-between">
+        <div className="flex p-2">
+          <div className="grid grid-cols-3 gap-x-10 gap-y-2 text-sm">
             <span className="col-span-1 font-medium text-zinc-600">ID</span>
             <span className="col-span-2 text-zinc-900">
               {productDetails.product.id}
@@ -57,6 +85,7 @@ const ProductModifyCard = ({ productDetails, setProductDetails }: Props) => {
             <span className="col-span-2 text-zinc-900">
               {productDetails.product.category}
             </span>
+
             <span className="col-span-1 font-medium text-zinc-600">
               Stock Keeping Unit
             </span>
@@ -71,24 +100,47 @@ const ProductModifyCard = ({ productDetails, setProductDetails }: Props) => {
               {productDetails.product.description}
             </span>
 
+            <span className="col-span-1 font-medium text-zinc-600">
+              In Stock
+            </span>
+            <span className="col-span-2 w-24">
+              <Input
+                inputMode="numeric"
+                pattern="[0-9]*"
+                id="in_stock"
+                required
+                onChange={(e) => {
+                  const val = e.target.value;
+                  if (/^\d*$/.test(val)) {
+                    setInStock(val);
+                  }
+                }}
+                value={inStock}
+                maxLength={6}
+                disabled={!isEditable}
+              />
+            </span>
+
             <span className="col-span-1 font-medium text-zinc-600">Price</span>
-            <Input
-              inputMode="decimal"
-              pattern="^\d*\.?\d*$"
-              id="price"
-              placeholder={`${productDetails.product.price.toFixed(2)}`}
-              required
-              onChange={(e) => {
-                const val = e.target.value;
-                if (/^\d*\.?\d{0,2}$/.test(val)) {
-                  setPrice(e.target.value);
-                }
-              }}
-              value={price}
-            />
+            <span className="col-span-2 w-24">
+              <Input
+                inputMode="decimal"
+                pattern="^\d*\.?\d*$"
+                id="price"
+                required
+                onChange={(e) => {
+                  const val = e.target.value;
+                  if (/^\d*\.?\d{0,2}$/.test(val)) {
+                    setPrice(e.target.value);
+                  }
+                }}
+                value={price}
+                disabled={!isEditable}
+              />
+            </span>
           </div>
         </div>
-        <div className="flex flex-col">
+        <div className="flex flex-col p-2">
           <Image
             src={productDetails.items[0].image_url}
             alt={productDetails.items[0].image_url}
@@ -98,20 +150,46 @@ const ProductModifyCard = ({ productDetails, setProductDetails }: Props) => {
             priority
             unoptimized
           />
-          <div className="flex flex-1 items-end gap-4">
+          <div className="flex flex-1 items-end gap-4 justify-center">
             <span>
-              <Button variant={"ghost"} className="text-sm">
-                Edit
-              </Button>
+              {!isEditable && (
+                <Button
+                  variant={"default"}
+                  className="text-sm"
+                  onClick={() => setIsEditable(true)}
+                >
+                  Edit
+                </Button>
+              )}
+              {isEditable && (
+                <Button
+                  variant={"default"}
+                  className="text-sm"
+                  onClick={modifyProductByID}
+                >
+                  Save
+                </Button>
+              )}
             </span>
             <span>
-              <Button
-                variant={"outline"}
-                className="text-sm"
-                onClick={deleteProductByID}
-              >
-                Delete
-              </Button>
+              {!isEditable && (
+                <Button
+                  variant={"outline"}
+                  className="text-sm"
+                  onClick={deleteProductByID}
+                >
+                  Delete
+                </Button>
+              )}
+              {isEditable && (
+                <Button
+                  variant={"outline"}
+                  className="text-sm"
+                  onClick={() => setIsEditable(false)}
+                >
+                  Cancel
+                </Button>
+              )}
             </span>
           </div>
         </div>

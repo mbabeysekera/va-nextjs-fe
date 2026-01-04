@@ -2,7 +2,7 @@ import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 
 export const POST = async (req: NextRequest): Promise<NextResponse> => {
-  const product = await req.json();
+  const product: ProductWithItems = await req.json();
 
   const productCreate = `${process.env.BACKEND_URL}${process.env.API_BASE_URL}/moderator/products/create`;
   const token = (await cookies()).get("access_token")?.value;

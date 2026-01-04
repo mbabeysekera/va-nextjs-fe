@@ -35,7 +35,7 @@ const ProductSelectImageGallery = ({ productDetails }: Props) => {
           <Image
             key={index}
             src={item.image_url}
-            alt={item.item_code.toString()}
+            alt={index.toString()}
             width={125}
             height={125}
             className={`rounded-lg border-2 ${
@@ -50,7 +50,7 @@ const ProductSelectImageGallery = ({ productDetails }: Props) => {
       <div className="flex w-200">
         <Image
           src={productDetails.items[selected].image_url}
-          alt={productDetails.items[selected].item_code.toString()}
+          alt={productDetails.items[selected].id.toString()}
           width={620}
           height={620}
           className="rounded-lg"
@@ -76,7 +76,7 @@ const ProductSelectImageGallery = ({ productDetails }: Props) => {
           Product ID: {productDetails.product.id}
         </p>
         <p className="text-sm text-muted-foreground p-2">
-          In Stock: {productDetails.items[selected].in_stock}
+          In Stock: {productDetails.product.in_stock}
         </p>
         {/* <div>
           <ButtonGroup>
