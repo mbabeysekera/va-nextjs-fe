@@ -64,7 +64,7 @@ export default async function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <AppContextProvider context={appContext}>
-          <header className="relative z-50">
+          <header className="relative z-50 bg-stone-300">
             <VALogoBar />
           </header>
           <main className="flex-1">

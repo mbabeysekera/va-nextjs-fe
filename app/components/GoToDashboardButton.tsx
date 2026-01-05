@@ -9,12 +9,7 @@ const GoToDashboardButton = () => {
   return (
     <Tooltip>
       <TooltipTrigger asChild>
-        <Button
-          variant="secondary"
-          size="icon"
-          aria-label="Login"
-          className="w-28"
-        >
+        <Button variant="ghost" size="icon" aria-label="Login" className="w-28">
           <Image
             src="/dashboard.svg"
             alt=""
