@@ -45,7 +45,7 @@ const CreateNewProductCard = () => {
   const [imageMap, setImages] = useState<File[]>([]);
   const [items, setItems] = useState<ItemDetails[]>([]);
 
-  const itemHandler = (image: File) => {
+  const itemHandler = async (image: File) => {
     if (validationStatus !== "valid") {
       toast.error("Add at least one image.");
       return;
@@ -53,16 +53,13 @@ const CreateNewProductCard = () => {
     const item: ItemDetails = {
       image_url: image.name,
     };
-    setImages((prev) => {
-      prev.push(image);
-      return prev;
-    });
+    setImages((prev) => [...prev, image]);
     setItems((items) => [...items, item]);
     setFileKey((k) => k + 1);
     setValidationStatus("idle");
   };
 
-  const onNextClickHandler = (stage: string) => {
+  const onNextClickHandler = async (stage: string) => {
     if (stage === "items") {
       if (
         title === "" ||
