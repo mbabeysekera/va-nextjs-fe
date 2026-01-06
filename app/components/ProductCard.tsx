@@ -48,15 +48,15 @@ const ProductCard = ({ title, brand, description, price, items }: Props) => {
   };
   return (
     <Card
-      className="relative z-0 flex flex-col items-center w-60 h-90 p-0 transition-shadow hover:shadow-md"
+      className="relative z-0 flex flex-col w-72 h-110 p-0 transition-shadow hover:shadow-md"
       onMouseEnter={startAutoPlay}
       onMouseLeave={stopAutoPlay}
     >
-      <CardContent className="flex items-center justify-center p-0 h-full w-full">
+      <CardContent className="flex justify-center p-0 w-full">
         <Carousel
           setApi={(api) => (apiRef.current = api)}
           opts={{ loop: true }}
-          className="flex items-center"
+          className="flex mt-4"
         >
           <CarouselContent>
             {items.map((item, index) => (
@@ -64,9 +64,9 @@ const ProductCard = ({ title, brand, description, price, items }: Props) => {
                 <Image
                   src={item.image_url}
                   alt={item.image_url}
-                  width={225}
-                  height={225}
-                  className="rounded-lg"
+                  width={320}
+                  height={320}
+                  className="rounded-lg w-64 h-64"
                   priority
                   unoptimized
                 />
@@ -75,13 +75,13 @@ const ProductCard = ({ title, brand, description, price, items }: Props) => {
           </CarouselContent>
         </Carousel>
       </CardContent>
-      <CardFooter className="flex-col items-start h-35 w-64">
-        <CardTitle>{title}</CardTitle>
-        {brand && <p className="text-xs">Brand: {brand}</p>}
-        <p className="text-sm">
+      <CardFooter className="flex-col items-start h-35 w-72">
+        <CardTitle className="text-xl">{title}</CardTitle>
+        {brand && <p className="text-sm">Brand: {brand}</p>}
+        <p className="text-lg">
           Rs <span>{price}</span>
         </p>
-        <CardDescription>{description}</CardDescription>
+        <CardDescription className="text-sm">{description}</CardDescription>
       </CardFooter>
     </Card>
   );
