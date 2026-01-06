@@ -19,10 +19,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { createProduct } from "@/lib/core/product/productAction";
-import {
-  searchByItemCode,
-  searchBySku,
-} from "@/lib/core/product/productValidators";
+import { searchBySku } from "@/lib/core/product/productValidators";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
 import { toast } from "sonner";
