@@ -2,6 +2,7 @@ export const createProduct = async (
   product: ProductWithItems,
   images: File[]
 ): Promise<boolean> => {
+  let imageCount = 0;
   for (const file of images) {
     if (file) {
       const formData = new FormData();
@@ -14,9 +15,8 @@ export const createProduct = async (
         return false;
       }
       const data: { url: string } = await res.json();
-      for (const item of product.items) {
-        item.image_url = data.url;
-      }
+      product.items[imageCount].image_url = data.url;
+      imageCount++;
     } else {
       return false;
     }
