@@ -9,7 +9,7 @@ import GoToDashboardButton from "./GoToDashboardButton";
 const LogoBarWidgets = () => {
   const appContext = useAppContext();
   return (
-    <div className=" flex ml-auto self-end pb-3 gap-3">
+    <div className=" flex ml-auto gap-3">
       {appContext.currentContext.isLoggedIn &&
         appContext.currentContext.userRole === "ADMIN" && (
           <Link href="/dashboard">

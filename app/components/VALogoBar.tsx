@@ -4,7 +4,7 @@ import LogoBarWidgets from "./LogoBarWidgets";
 
 const VALogoBar = () => {
   return (
-    <div className="mx-auto max-w-7xl px-6 h-24 mb-4 flex items-center gap-3">
+    <div className="mx-auto max-w-7xl px-6 h-34 mb-4 flex items-center gap-3">
       <Link href="/" className="flex items-center">
         <Image
           src="/app_logo.png"
@@ -18,9 +18,9 @@ const VALogoBar = () => {
       <Image
         src="/slogan.png"
         alt="Product slogan Logo"
-        width={200}
-        height={92}
-        className="self-end pb-3 h-auto w-auto"
+        width={1000}
+        height={100}
+        className="w-54 h-6 mt-3"
       />
       <LogoBarWidgets />
     </div>

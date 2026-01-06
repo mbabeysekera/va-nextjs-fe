@@ -29,7 +29,7 @@ const LogoutLogoButton = () => {
     <Tooltip>
       <TooltipTrigger asChild>
         <Button
-          variant="outline"
+          variant="ghost"
           size="icon"
           aria-label="Logout"
           className="w-24"
