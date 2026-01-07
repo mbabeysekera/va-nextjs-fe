@@ -6,7 +6,8 @@
 :root {
   /* --foreground: #171717; */
   --radius: 0.625rem;
-  --background: oklch(1 0 0);
+  /* --background: oklch(1 0 0); */
+  --background: 220 20% 95%; /* ≈ #f0f2f5 */
   --foreground: oklch(0.145 0 0);
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.145 0 0);
@@ -18,7 +19,8 @@
   --secondary-foreground: oklch(0.205 0 0);
   --muted: oklch(0.97 0 0);
   --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
+  /* --accent: oklch(0.97 0 0); */
+  --accent: oklch(91.279% 0.0001 271.152);
   --accent-foreground: oklch(0.205 0 0);
   --destructive: oklch(0.577 0.245 27.325);
   --border: oklch(0.922 0 0);

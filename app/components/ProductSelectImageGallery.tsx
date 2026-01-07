@@ -29,8 +29,8 @@ const ProductSelectImageGallery = ({ productDetails }: Props) => {
     }
   };
   return (
-    <div className="flex flex-row h-full w-full gap-6">
-      <div className="flex flex-col gap-2">
+    <div className="flex flex-row h-full w-full gap-10">
+      <div className="flex flex-col gap-4">
         {productDetails.items.map((item, index) => (
           <Image
             key={index}
@@ -38,7 +38,7 @@ const ProductSelectImageGallery = ({ productDetails }: Props) => {
             alt={index.toString()}
             width={125}
             height={125}
-            className={`rounded-lg border-2 ${
+            className={`w-30 h-25 rounded-lg border-2 ${
               index === selected ? " border-zinc-700" : ""
             }`}
             priority
@@ -47,7 +47,7 @@ const ProductSelectImageGallery = ({ productDetails }: Props) => {
           />
         ))}
       </div>
-      <div className="flex w-200">
+      <div className="flex w-200 h-160">
         <Image
           src={productDetails.items[selected].image_url}
           alt={productDetails.items[selected].image_url}

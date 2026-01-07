@@ -1,7 +1,7 @@
 import ProductListCard from "@/app/components/ProductListCard";
 
 const ProductPage = async () => {
-  const getAllProduct = `${process.env.BACKEND_URL}${process.env.API_BASE_URL}/products/all`;
+  const getAllProduct = `${process.env.BACKEND_URL}${process.env.API_BASE_URL}/products/all?count=12`;
   const res = await fetch(getAllProduct, {
     cache: "no-store",
   });

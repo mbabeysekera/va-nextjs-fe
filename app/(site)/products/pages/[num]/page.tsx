@@ -18,7 +18,7 @@ const ProductPaginatedPage = async ({
   const pageNumber = parseInt(num);
   const getAllProduct = `${process.env.BACKEND_URL}${
     process.env.API_BASE_URL
-  }/products/all?page=${pageNumber}&count=${10}${
+  }/products/all?page=${pageNumber}&count=${12}${
     category ? `&category=${category}` : ""
   }`;
   const res = await fetch(getAllProduct, {
