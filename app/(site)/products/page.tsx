@@ -1,12 +1,13 @@
 import ProductListCard from "@/app/components/ProductListCard";
 
 const ProductPage = async () => {
-  const getAllProduct = `${process.env.BACKEND_URL}${process.env.API_BASE_URL}/products/all?count=12`;
+  const numberOfProductsToFetch = 12;
+  const getAllProduct = `${process.env.BACKEND_URL}${process.env.API_BASE_URL}/products/all?count=${numberOfProductsToFetch}`;
   const res = await fetch(getAllProduct, {
     cache: "no-store",
   });
   const products: ProductList = await res.json();
-  const pageCount = 2; //Math.ceil(products.count / 10);
+  const pageCount = products.count === numberOfProductsToFetch ? 2 : 1;
   return (
     <ProductListCard
       productList={products}

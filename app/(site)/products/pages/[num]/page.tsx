@@ -16,16 +16,22 @@ const ProductPaginatedPage = async ({
   const category = (await searchParams)?.category ?? null;
 
   const pageNumber = parseInt(num);
+  const numberOfProductsToFetch = 12;
+
   const getAllProduct = `${process.env.BACKEND_URL}${
     process.env.API_BASE_URL
-  }/products/all?page=${pageNumber}&count=${12}${
+  }/products/all?page=${pageNumber}&count=${numberOfProductsToFetch}${
     category ? `&category=${category}` : ""
   }`;
+
   const res = await fetch(getAllProduct, {
     cache: "no-store",
   });
+
   const products: ProductList = await res.json();
-  const pageCount = 2; //Math.ceil(products.count / 10);
+  const pageCount =
+    products.count === numberOfProductsToFetch ? pageNumber + 1 : pageNumber;
+
   return (
     <ProductListCard
       productList={products}
