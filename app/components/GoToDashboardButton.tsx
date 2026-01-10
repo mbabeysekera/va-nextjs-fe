@@ -20,7 +20,7 @@ const GoToDashboardButton = () => {
           <div>Dashboard</div>
         </Button>
       </TooltipTrigger>
-      <TooltipContent>
+      <TooltipContent className="text-white">
         <p>Dashboard</p>
       </TooltipContent>
     </Tooltip>
