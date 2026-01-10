@@ -21,7 +21,7 @@ const AddToCartButton = () => {
           />
         </Button>
       </TooltipTrigger>
-      <TooltipContent>
+      <TooltipContent className="text-white">
         <p>Checkout cart</p>
       </TooltipContent>
     </Tooltip>

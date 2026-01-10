@@ -20,7 +20,7 @@ const LoginLogoButton = () => {
           <div>Login</div>
         </Button>
       </TooltipTrigger>
-      <TooltipContent>
+      <TooltipContent className="text-white">
         <p>Login</p>
       </TooltipContent>
     </Tooltip>
