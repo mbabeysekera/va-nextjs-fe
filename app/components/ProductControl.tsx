@@ -8,11 +8,17 @@ const ProductControl = () => {
     <div className="flex h-full w-full flex-col gap-6 px-6 py-2">
       <div className="flex flex-1 items-start justify-center">
         <Tabs defaultValue="add" className="w-full">
-          <TabsList className="h-12 w-2xl">
-            <TabsTrigger value="add" className="text-lg text-zinc-600">
+          <TabsList className="h-12 w-2xl bg-accent">
+            <TabsTrigger
+              value="add"
+              className="text-lg text-zinc-600 data-[state=active]:bg-white"
+            >
               Add Product
             </TabsTrigger>
-            <TabsTrigger value="modify" className="text-lg text-zinc-600">
+            <TabsTrigger
+              value="modify"
+              className="text-lg text-zinc-600 data-[state=active]:bg-white"
+            >
               Modify / Delete Product
             </TabsTrigger>
           </TabsList>
