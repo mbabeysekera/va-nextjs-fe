@@ -41,6 +41,7 @@ const ModifyExistingProductCard = () => {
           }}
           value={productID}
           maxLength={12}
+          className="bg-white"
         />
         <Button
           disabled={!productID || isLoading}
@@ -50,6 +51,7 @@ const ModifyExistingProductCard = () => {
             findProductByID();
           }}
           type="button"
+          className="border-zinc-600"
         >
           Check
         </Button>
