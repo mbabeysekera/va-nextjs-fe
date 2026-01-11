@@ -159,6 +159,7 @@ const CreateNewProductCard = () => {
                     onChange={(e) => setTitle(e.target.value)}
                     value={title}
                     maxLength={24}
+                    className="bg-white"
                   />
                 </Field>
                 <Field>
@@ -170,6 +171,7 @@ const CreateNewProductCard = () => {
                     onChange={(e) => setBrand(e.target.value)}
                     value={brand}
                     maxLength={24}
+                    className="bg-white"
                   />
                 </Field>
                 <Field>
@@ -178,7 +180,7 @@ const CreateNewProductCard = () => {
                     defaultValue={category}
                     onValueChange={(e) => setCategory(e as ProductCategory)}
                   >
-                    <SelectTrigger id="cat">
+                    <SelectTrigger id="cat" className="bg-white">
                       <SelectValue placeholder="Category" />
                     </SelectTrigger>
                     <SelectContent>
@@ -228,12 +230,14 @@ const CreateNewProductCard = () => {
                       }}
                       value={sku}
                       maxLength={12}
+                      className="bg-white"
                     />
                     <Button
                       disabled={!sku || validationStatus === "checking"}
                       variant={"outline"}
                       onClick={() => onValidationCheck("sku")}
                       type="button"
+                      className="border-zinc-600"
                     >
                       Check
                     </Button>
@@ -248,6 +252,7 @@ const CreateNewProductCard = () => {
                     onChange={(e) => setDescription(e.target.value)}
                     value={description}
                     maxLength={64}
+                    className="bg-white"
                   />
                 </Field>
                 <Field>
@@ -265,6 +270,7 @@ const CreateNewProductCard = () => {
                       }
                     }}
                     value={price}
+                    className="bg-white"
                   />
                 </Field>
                 <Field>
@@ -283,6 +289,7 @@ const CreateNewProductCard = () => {
                     }}
                     value={stock}
                     maxLength={6}
+                    className="bg-white"
                   />
                 </Field>
                 <div className="flex flex-row justify-end">
@@ -318,6 +325,7 @@ const CreateNewProductCard = () => {
                     setValidationStatus("valid");
                     setImage(file);
                   }}
+                  className="bg-white"
                 />
               </Field>
               <Field>
@@ -328,11 +336,12 @@ const CreateNewProductCard = () => {
               <div className="mt-2 flex items-center justify-between border-t border-zinc-200 pt-4">
                 <Button
                   type="button"
-                  variant="secondary"
+                  variant="outline"
                   onClick={() => {
                     setValidationStatus("idle");
                     setStage("product");
                   }}
+                  className="border-zinc-600"
                 >
                   Back
                 </Button>
@@ -348,6 +357,7 @@ const CreateNewProductCard = () => {
                       setValidationStatus("valid");
                       itemHandler(image as File);
                     }}
+                    className="border-zinc-600"
                   >
                     Add Item
                   </Button>
@@ -418,8 +428,9 @@ const CreateNewProductCard = () => {
               <div className="mt-6 flex items-center justify-between border-t border-zinc-200 pt-4">
                 <Button
                   type="button"
-                  variant="secondary"
+                  variant="outline"
                   onClick={() => setStage("items")}
+                  className="border-zinc-600"
                 >
                   Back
                 </Button>
@@ -429,6 +440,7 @@ const CreateNewProductCard = () => {
                     variant="outline"
                     type="button"
                     onClick={onCancelHandler}
+                    className="border-zinc-600"
                   >
                     Cancel
                   </Button>
