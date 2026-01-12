@@ -29,8 +29,8 @@ const ProductSelectImageGallery = ({ productDetails }: Props) => {
     }
   };
   return (
-    <div className="flex flex-row h-full w-full gap-10">
-      <div className="flex flex-col gap-4">
+    <div className="flex flex-col md:flex-row h-full w-full gap-6 md:gap-10">
+      <div className="flex flex-row md:flex-col gap-3 justify-center md:justify-start">
         {productDetails.items.map((item, index) => (
           <Image
             key={index}
@@ -47,7 +47,7 @@ const ProductSelectImageGallery = ({ productDetails }: Props) => {
           />
         ))}
       </div>
-      <div className="flex w-200 h-160">
+      <div className="flex justify-center md:justify-start w-full md:w-200">
         <Image
           src={productDetails.items[selected].image_url}
           alt={productDetails.items[selected].image_url}
@@ -58,7 +58,7 @@ const ProductSelectImageGallery = ({ productDetails }: Props) => {
           unoptimized
         />
       </div>
-      <div className="flex flex-col w-140">
+      <div className="flex flex-col w-full md:w-140 text-center md:text-left">
         <p className="text-xs font-bold text-muted-foreground p-2">
           Category: {productDetails.product.category}
         </p>
