@@ -20,7 +20,7 @@ const VALogoBar = () => {
         alt="Product slogan Logo"
         width={1000}
         height={100}
-        className="w-54 h-6 mt-3"
+        className="hidden md:block w-54 h-6 mt-3"
       />
       <LogoBarWidgets />
     </div>
