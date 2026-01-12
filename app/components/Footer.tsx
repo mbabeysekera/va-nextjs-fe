@@ -47,8 +47,8 @@ const socialMedia: FooterDataColumn = {
 const Footer = () => {
   return (
     <div className="bg-zinc-500 text-white">
-      <div className="flex justify-between mx-auto max-w-7xl px-6 py-1">
-        <div className="mt-4">
+      <div className="flex flex-col md:flex-row md:justify-between mx-auto max-w-7xl px-6 py-4 gap-6">
+        <div className="mt-4 text-center md:text-left">
           <Image
             src="/app_logo.png"
             alt="Product App Logo"
@@ -58,7 +58,7 @@ const Footer = () => {
             className="h-auto w-auto"
           />
         </div>
-        <div className="mt-4">
+        <div className="mt-4 text-center md:text-left">
           <h1 className="text-xl font-semibold mb-6">{contactUs.title}</h1>
           <ul>
             {contactUs.details.map((detail) => (
@@ -70,7 +70,7 @@ const Footer = () => {
             ))}
           </ul>
         </div>
-        <div className="mt-4">
+        <div className="mt-4 text-center md:text-left">
           <h1 className="text-xl font-semibold mb-6">{categories.title}</h1>
           <ul>
             {categories.details.map((detail) => (
@@ -82,7 +82,7 @@ const Footer = () => {
             ))}
           </ul>
         </div>
-        <div className="mt-4">
+        <div className="mt-4 text-center md:text-left">
           <h1 className="text-xl font-semibold mb-6 ml-2">
             {socialMedia.title}
           </h1>
