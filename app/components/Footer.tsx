@@ -29,14 +29,22 @@ const categories: FooterDataColumn = {
     { topic: "Necklace", href: "/products/pages/1?category=NECKLACE" },
     { topic: "Bracelets", href: "/products/pages/1?category=BRACELET" },
     { topic: "Pendants", href: "/products/pages/1?category=PENDANT" },
+    { topic: "Sets", href: "/products/pages/1?category=SETS" },
+    { topic: "Other", href: "/products/pages/1?category=OTHER" },
   ],
 };
 
 const socialMedia: FooterDataColumn = {
   title: "Follow Us On",
   details: [
-    { topic: "/facebook.svg", href: "https://www.facebook.com/vacollection/" },
-    { topic: "/instagram.svg", href: "https://instagram.com/vacollection/" },
+    {
+      topic: "/facebook.svg",
+      href: "https://www.facebook.com/profile.php?id=61585630184753",
+    },
+    {
+      topic: "/instagram.svg",
+      href: "https://www.instagram.com/vacollection218/",
+    },
     {
       topic: "/tiktok.svg",
       href: "https://www.tiktok.com/discover/vacollection",
@@ -49,14 +57,16 @@ const Footer = () => {
     <div className="bg-zinc-500 text-white">
       <div className="flex flex-col md:flex-row md:justify-between mx-auto max-w-7xl px-6 py-4 gap-6">
         <div className="mt-4 text-center md:text-left">
-          <Image
-            src="/app_logo.png"
-            alt="Product App Logo"
-            width={92}
-            height={92}
-            priority
-            className="h-auto w-auto"
-          />
+          <Link href="/">
+            <Image
+              src="/app_logo.png"
+              alt="Product App Logo"
+              width={92}
+              height={92}
+              priority
+              className="h-auto w-auto"
+            />
+          </Link>
         </div>
         <div className="mt-4 text-center md:text-left">
           <h1 className="text-xl font-semibold mb-6">{contactUs.title}</h1>
