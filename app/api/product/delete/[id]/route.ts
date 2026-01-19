@@ -13,6 +13,7 @@ export const DELETE = async (
     method: "DELETE",
     headers: {
       Authorization: `Bearer ${token}`,
+      "X-App-Id": process.env.APP_ID || "",
     },
     cache: "no-store",
   });

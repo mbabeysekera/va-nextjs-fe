@@ -10,6 +10,9 @@ const ProductSelectPage = async ({ params }: PageProps) => {
   const { id } = await params;
   const getProductByID = `${process.env.BACKEND_URL}${process.env.API_BASE_URL}/products/${id}`;
   const res = await fetch(getProductByID, {
+    headers: {
+      "X-App-Id": process.env.APP_ID || "",
+    },
     cache: "no-store",
   });
 

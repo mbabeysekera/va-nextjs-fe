@@ -9,6 +9,9 @@ export const GET = async (
   const res = await fetch(itemCodeAPI, {
     method: "GET",
     cache: "no-store",
+    headers: {
+      "X-App-Id": process.env.APP_ID || "",
+    },
   });
 
   if (!res.ok) {

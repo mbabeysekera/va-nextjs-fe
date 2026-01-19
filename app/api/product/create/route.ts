@@ -11,6 +11,7 @@ export const POST = async (req: NextRequest): Promise<NextResponse> => {
     headers: {
       Authorization: `Bearer ${token}`,
       "Content-Type": "application/json",
+      "X-App-Id": process.env.APP_ID || "",
     },
     body: JSON.stringify(product),
   });
