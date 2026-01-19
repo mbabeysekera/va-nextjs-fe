@@ -20,6 +20,7 @@ const introspect = async (): Promise<IntrospectResponse | null> => {
   const res = await fetch(instrospectAPI, {
     method: "GET",
     headers: {
+      "X-App-Id": process.env.APP_ID || "",
       Authorization: `Bearer ${token}`,
     },
     cache: "no-store",

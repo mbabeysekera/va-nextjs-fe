@@ -1,4 +1,3 @@
-import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 
 export const GET = async (
@@ -10,6 +9,9 @@ export const GET = async (
   const res = await fetch(getProductAPI, {
     method: "GET",
     cache: "no-store",
+    headers: {
+      "X-App-Id": process.env.APP_ID || "",
+    },
   });
 
   if (!res.ok) {

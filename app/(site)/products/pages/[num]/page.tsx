@@ -25,6 +25,9 @@ const ProductPaginatedPage = async ({
   }`;
 
   const res = await fetch(getAllProduct, {
+    headers: {
+      "X-App-Id": process.env.APP_ID || "",
+    },
     cache: "no-store",
   });
 

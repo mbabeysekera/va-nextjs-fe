@@ -7,7 +7,10 @@ export const POST = async (req: NextRequest): Promise<NextResponse> => {
 
   const res = await fetch(loginAPI, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: {
+      "Content-Type": "application/json",
+      "X-App-Id": process.env.APP_ID || "",
+    },
     body: JSON.stringify({ mobile_no: mobileNo, password: password }),
   });
 

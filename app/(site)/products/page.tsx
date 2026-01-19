@@ -5,6 +5,9 @@ const ProductPage = async () => {
   const getAllProduct = `${process.env.BACKEND_URL}${process.env.API_BASE_URL}/products/all?count=${numberOfProductsToFetch}`;
   const res = await fetch(getAllProduct, {
     cache: "no-store",
+    headers: {
+      "X-App-Id": process.env.APP_ID || "",
+    },
   });
   const products: ProductList = await res.json();
   const pageCount = products.count === numberOfProductsToFetch ? 2 : 1;
